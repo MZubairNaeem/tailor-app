@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "122867724764",
+    "project_id": "tailor-app-83b4c",
+    "storage_bucket": "tailor-app-83b4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122867724764:android:09f771988dcf6a02e09f19",
+        "android_client_info": {
+          "package_name": "com.example.ect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122867724764-249btn33hcadu17af147gfensgga4ht8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAutFGZ8XzGCFeAeN7t6RjVR3K3BEc8bHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122867724764-249btn33hcadu17af147gfensgga4ht8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
