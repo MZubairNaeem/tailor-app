@@ -109,11 +109,12 @@ class _LoginState extends State<Login> {
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  showSnackBar(
-                                      context, "Please enter your Email");
-                                  return null;
+                                  return 'Please enter your email';
+                                } else if (!RegExp(
+                                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                    .hasMatch(value)) {
+                                  return 'Please enter a valid email';
                                 }
-                                // You can add more validation logic here if needed
                                 return null;
                               },
                               // You can add more properties and callbacks as needed

@@ -12,7 +12,7 @@ final cart = FutureProvider<List<SellerProductModel>>((ref) async {
       .where("cart", arrayContains: uid)
       .get();
 
-  List<SellerProductModel> favoriteTailors = doc.docs.map((snapshot) {
+  List<SellerProductModel> cart = doc.docs.map((snapshot) {
     Map<String, dynamic> data = snapshot.data();
     return SellerProductModel(
       productId: data['productId'],
@@ -26,5 +26,5 @@ final cart = FutureProvider<List<SellerProductModel>>((ref) async {
     );
   }).toList();
 
-  return favoriteTailors;
+  return cart;
 });

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/cmt_model.dart';
-
 final allComments =
     FutureProvider.family<List<CmtModel>,String?>((ref,tailorId) async {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;

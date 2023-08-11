@@ -4,7 +4,6 @@ import 'package:ect/Constants/colors.dart';
 import 'package:ect/constants/button.dart';
 import 'package:ect/models/user.dart';
 import 'package:ect/views/auth/login.dart';
-import 'package:ect/views/auth/welcome.dart';
 import 'package:flutter/material.dart';
 
 import '../../view_models/controllers/auth.dart';
@@ -108,9 +107,12 @@ class _SignUpState extends State<SignUp> {
                             keyboardType: TextInputType.emailAddress,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter an email";
+                                return 'Please enter your email';
+                              } else if (!RegExp(
+                                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                  .hasMatch(value)) {
+                                return 'Please enter a valid email';
                               }
-                              // You can add more validation logic here if needed
                               return null;
                             },
                             // You can add more properties and callbacks as needed
@@ -180,9 +182,10 @@ class _SignUpState extends State<SignUp> {
                             keyboardType: TextInputType.visiblePassword,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a password";
+                                return 'Please enter your password';
+                              } else if (value.length < 6) {
+                                return 'Password must be at least 6 characters';
                               }
-                              // You can add more validation logic here if needed
                               return null;
                             },
                             // You can add more properties and callbacks as needed
@@ -310,7 +313,7 @@ class _SignUpState extends State<SignUp> {
         });
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const Welcome()));
+            context, MaterialPageRoute(builder: (context) => const Login()));
       } else {
         setState(() {
           isLoading = false;
