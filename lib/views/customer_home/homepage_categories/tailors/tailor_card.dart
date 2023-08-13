@@ -142,7 +142,6 @@ class _TailorCardState extends State<TailorCard> {
         top: size.height * 0.02,
       ),
       child: SizedBox(
-        height: size.height * 0.20,
         child: Card(
           color: widget.cardColor,
           shape: RoundedRectangleBorder(
@@ -335,7 +334,8 @@ class _TailorCardState extends State<TailorCard> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: List.generate(
-                                        widget.tailorProfileModel!.rating!,
+                                        (widget
+                                            .tailorProfileModel!.rating!),
                                         (index) => const StarIcon(),
                                       ),
                                     ),

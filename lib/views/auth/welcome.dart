@@ -2,12 +2,20 @@ import 'package:ect/Constants/colors.dart';
 import 'package:ect/constants/button.dart';
 import 'package:flutter/material.dart';
 
+import '../customer_home/nav_home/customer_home.dart';
 import 'login.dart';
 import 'who_are_you.dart';
 
-class Welcome extends StatelessWidget {
+class Welcome extends StatefulWidget {
   const Welcome({super.key});
 
+  @override
+  State<Welcome> createState() => _WelcomeState();
+}
+
+class _WelcomeState extends State<Welcome> {
+  String userType = "guest";
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -46,8 +54,8 @@ class Welcome extends StatelessWidget {
                 children: [
                   Text("Explore "),
                   Text("Tailor and Purchase online",
-                      style:
-                          TextStyle(color: customOrange, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          color: customOrange, fontWeight: FontWeight.bold)),
                 ],
               ),
               SizedBox(
@@ -77,6 +85,69 @@ class Welcome extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const Login()),
                   );
                 },
+              ),
+              SizedBox(
+                height: size.height * 0.04,
+              ),
+              SizedBox(
+                width: size.width * 0.7,
+                child: const Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: customPurple,
+                        thickness: 2,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                        "or",
+                        style: TextStyle(fontSize: 22),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: customPurple,
+                        thickness: 2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.04,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "As a Guest ? ",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      // await FirebaseAuth.instance.signInAnonymously();
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const GuestHome()));
+                    },
+                    child: const Text(
+                      "Explore",
+                      style: TextStyle(
+                          color: customPurple,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22),
+                    ),
+                  ),
+                ],
               )
             ],
           ),

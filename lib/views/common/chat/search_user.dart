@@ -165,7 +165,6 @@ class _SearchUserState extends State<SearchUser> {
                               }
                             },
                             title: Text(searchUser.username!),
-                            subtitle: Text(searchUser.email!),
                             trailing: const Icon(Icons.message),
                           ),
                         );

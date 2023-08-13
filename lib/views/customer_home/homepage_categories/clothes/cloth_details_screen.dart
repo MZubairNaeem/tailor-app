@@ -216,16 +216,44 @@ class _ClothDetailsScreenState extends State<ClothDetailsScreen> {
                       borderRadius: BorderRadius.circular(10.0)),
                   child: Column(
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          widget.sellerProductModel!.productName!,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: size.height * 0.024,
-                            fontWeight: FontWeight.w700,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.sellerProductModel!.productName!,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
+                          Row(
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                  onPressed: () async {
+                                    _showRatingDialog(context);
+                                    // add rating into database
+                                  },
+                                  icon: Icon(
+                                    Icons.star,
+                                    color: starColor,
+                                    size: size.height * 0.035,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "${widget.sellerProductModel!.rating}/5",
+                                style: TextStyle(
+                                  fontSize: size.height * 0.02,
+                                  fontWeight: FontWeight.w700,
+                                  color: darkPink,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -523,6 +551,74 @@ class _ClothDetailsScreenState extends State<ClothDetailsScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  int selectedRating = 0;
+
+  void _showRatingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Rate Us'),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(5, (index) {
+              final int rating = index + 1;
+              return IconButton(
+                onPressed: () async {
+                  setState(() {
+                    selectedRating = rating;
+                  });
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('tailorProducts')
+                        .doc(widget.sellerProductModel!.productId!)
+                        .collection('rating')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .set({
+                      'userRated': selectedRating,
+                      'timestamp': FieldValue.serverTimestamp(),
+                      'userId': FirebaseAuth.instance.currentUser!.uid,
+                    });
+                    showSnackBar(context, "You have rated $rating star(s).");
+
+                    // get all ratings of this tailor and calculate average rating
+                    final ratings = await FirebaseFirestore.instance
+                        .collection('tailorProducts')
+                        .doc(widget.sellerProductModel!.productId!)
+                        .collection('rating')
+                        .get();
+                    dynamic totalRating = 0;
+                    for (var rating in ratings.docs) {
+                      totalRating += rating['userRated'];
+                    }
+
+                    double averageRating = (totalRating / ratings.docs.length);
+                    int intValue = averageRating.toInt();
+
+                    await FirebaseFirestore.instance
+                        .collection('tailorProducts')
+                        .doc(widget.sellerProductModel!.productId!)
+                        .update({
+                      'rating': intValue,
+                    });
+                  } catch (e) {
+                    showSnackBar(context, e.toString());
+                  }
+
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.star,
+                  color: rating <= selectedRating ? starColor : Colors.grey,
+                ),
+              );
+            }),
+          ),
+        );
+      },
     );
   }
 }

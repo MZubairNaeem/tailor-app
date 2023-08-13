@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/user.dart';
+import '../../views/auth/login.dart';
 
 class Auth {
   static Auth instance = Auth();
@@ -64,13 +65,14 @@ class Auth {
     }
   }
 
-  Future<UserModel> register({
+  Future<String> register({
     required String email,
     required String password,
     required String username,
     required String address,
     required String userType,
     required String photoUrl,
+    required BuildContext context,
   }) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
@@ -93,13 +95,26 @@ class Auth {
               userModel.toJson(),
             );
         debugPrint("USER ADDED TO FIRESTORE");
-        return userModel;
+         Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const Login()));
+            ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(
+            content: Text("Account created successfully"),
+          ),
+        );
+        return "Account created successfully";
       } else {
         throw Exception('Registration failed. Please try again.');
       }
     } catch (e) {
-      debugPrint(e.toString().toUpperCase());
-      throw Exception('Registration failed: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(
+            content: Text(e.toString()),
+          ),
+        );
+        // ignore: use_build_context_synchronously
+       
+      return e.toString();
     }
   }
 

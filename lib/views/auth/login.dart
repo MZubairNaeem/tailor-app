@@ -165,9 +165,7 @@ class _LoginState extends State<Login> {
                               keyboardType: TextInputType.visiblePassword,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  showSnackBar(
-                                      context, "Please enter your Password");
-                                  return null;
+                                      return "Please enter your Password";
                                 }
                                 // You can add more validation logic here if needed
                                 return null;
@@ -273,7 +271,7 @@ class _LoginState extends State<Login> {
         showSnackBar(context, "Something went wrong");
       }
     } catch (e) {
-      showSnackBar(context, "Something went wrong");
+      showSnackBar(context, e.toString());
     }
 
     setState(() {

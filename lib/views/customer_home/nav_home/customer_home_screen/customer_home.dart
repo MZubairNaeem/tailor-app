@@ -45,7 +45,6 @@ class _CustomerHomeState extends State<CustomerHome> {
       });
     }
 
-
     @override
     void initState() {
       getUserData();
@@ -721,9 +720,9 @@ class _CustomerHomeState extends State<CustomerHome> {
                                                                         .center,
                                                                 children: List
                                                                     .generate(
-                                                                  userModelList[
+                                                              (userModelList[
                                                                           index]
-                                                                      .rating!,
+                                                                      .rating!),
                                                                   (index) =>
                                                                       const StarIcon(),
                                                                 ),

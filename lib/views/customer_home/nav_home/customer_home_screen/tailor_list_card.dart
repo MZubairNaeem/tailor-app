@@ -125,7 +125,7 @@ class _TailorListCardState extends State<TailorListCard> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: List.generate(
-                                  userModelList[0].rating!,
+                    (userModelList[0].rating!),
                                   (index) => const StarIcon(),
                                 ),
                               ),

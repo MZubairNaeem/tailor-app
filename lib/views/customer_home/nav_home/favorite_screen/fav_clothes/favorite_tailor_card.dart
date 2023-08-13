@@ -76,7 +76,6 @@ class FavouriteItemCardState extends State<FavouriteTailorCard> {
           );
         },
         child: SizedBox(
-          height: size.height * 0.23,
           width: double.infinity,
           child: Card(
             shape: RoundedRectangleBorder(
@@ -131,11 +130,13 @@ class FavouriteItemCardState extends State<FavouriteTailorCard> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0, right: 10.0),
-                        child: Image.network(
-                          widget.tailorProfileModel!.tailorImage!,
-                          width: size.width * 0.25,
-                          height: size.height * 0.125,
-                          fit: BoxFit.contain,
+                        child: SizedBox(
+                          child: Image.network(
+                            widget.tailorProfileModel!.tailorImage!,
+                            width: size.width * 0.25,
+                            height: size.height * 0.125,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                       Expanded(

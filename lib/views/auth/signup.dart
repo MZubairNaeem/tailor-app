@@ -300,27 +300,26 @@ class _SignUpState extends State<SignUp> {
       isLoading = true;
     });
     try {
-      UserModel userModel = await Auth().register(
-          username: _usernameController.text.trim(),
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-          address: _addressController.text.trim(),
-          userType: widget.signUpType!,
-          photoUrl: "https://i.stack.imgur.com/34AD2.jpg");
-      if (userModel != null) {
+      String res = await Auth().register(
+        username: _usernameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        address: _addressController.text.trim(),
+        userType: widget.signUpType!,
+        photoUrl: "https://i.stack.imgur.com/34AD2.jpg",
+        context: context,
+      );
+      if (res != null) {
         setState(() {
           isLoading = false;
         });
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const Login()));
       } else {
         setState(() {
           isLoading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Something went wrong!'),
+          SnackBar(
+            content: Text(res),
           ),
         );
       }

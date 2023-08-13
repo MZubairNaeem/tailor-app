@@ -2,6 +2,7 @@ import 'package:ect/views/customer_home/nav_home/favorite_screen/fav_clothes/fav
 import 'package:flutter/material.dart';
 
 import '../../../../Constants/colors.dart';
+import '../bottom_nav_bar.dart';
 import 'fav_clothes/fav_tailors.dart';
 
 class FavoriteScreen extends StatefulWidget {
@@ -29,41 +30,51 @@ class _FavoriteScreenState extends State<FavoriteScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: customPurple,
-        title: const Text(
-          "Favorites",
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.w700,
+    return WillPopScope(
+      onWillPop: () async {
+        return await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CustomerBottomNavBar(),
           ),
-        ),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          TabBar(
-            isScrollable: true,
-            indicatorColor: iconColor,
-            labelColor: customBlack,
-            controller: _tabController,
-            tabs: const [
-              Tab(text: 'Tailors'),
-              Tab(text: 'Clothes'),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: const [
-                FavTailors(),
-                FavClothes(),
-              ],
+        );
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: customPurple,
+          title: const Text(
+            "Favorites",
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
             ),
           ),
-        ],
+          centerTitle: true,
+          elevation: 0,
+        ),
+        body: Column(
+          children: [
+            TabBar(
+              isScrollable: true,
+              indicatorColor: iconColor,
+              labelColor: customBlack,
+              controller: _tabController,
+              tabs: const [
+                Tab(text: 'Tailors'),
+                Tab(text: 'Clothes'),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: const [
+                  FavTailors(),
+                  FavClothes(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

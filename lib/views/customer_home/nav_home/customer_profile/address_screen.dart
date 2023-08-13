@@ -17,9 +17,13 @@ class AddressScreen extends StatefulWidget {
 class _AddressScreenState extends State<AddressScreen> {
   Position? _currentPosition;
   String? _address;
+  bool laod = false;
 
   // Function to get the user's current location
   void _getCurrentLocation() async {
+    setState(() {
+      laod = true;
+    });
     try {
       // Request location permission
       if (!await Geolocator.isLocationServiceEnabled()) {
@@ -27,6 +31,9 @@ class _AddressScreenState extends State<AddressScreen> {
         if (permission == LocationPermission.denied ||
             permission == LocationPermission.deniedForever) {
           // Handle case when the user denies location permission
+          setState(() {
+            laod = false;
+          });
           return;
         }
       }
@@ -48,6 +55,9 @@ class _AddressScreenState extends State<AddressScreen> {
       if (placemarks.isNotEmpty) {
         setState(() {
           _address = placemarks[0].street! + ', ' + placemarks[0].locality!;
+        });
+        setState(() {
+          laod = false;
         });
       }
     } catch (e) {
@@ -144,18 +154,26 @@ class _AddressScreenState extends State<AddressScreen> {
                       ),
                     )
                   : Container(),
-              ElevatedButton(
-                onPressed: _getCurrentLocation,
-                style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(iconColor)),
-                child: const Text(
-                  "Add New Address",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
+              laod
+                  ? const Padding(
+                      padding: EdgeInsets.all(18.0),
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: customPurple,
+                      )),
+                    )
+                  : ElevatedButton(
+                      onPressed: _getCurrentLocation,
+                      style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(iconColor)),
+                      child: const Text(
+                        "Add New Address",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),

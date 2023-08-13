@@ -19,13 +19,10 @@ import '../../../common/chat/chat.dart';
 
 class TailorDetails extends StatefulWidget {
   TailorProfileModel? tailorProfileModel;
-   UserModel? userModel;
-   User? firebaseUser;
+  UserModel? userModel;
+  User? firebaseUser;
   TailorDetails(
-      {super.key,
-      this.tailorProfileModel,
-       this.userModel,
-       this.firebaseUser});
+      {super.key, this.tailorProfileModel, this.userModel, this.firebaseUser});
 
   @override
   State<TailorDetails> createState() => _TailorDetailsState();
@@ -33,29 +30,29 @@ class TailorDetails extends StatefulWidget {
 
 class _TailorDetailsState extends State<TailorDetails> {
   UserModel? userModel;
-    User? firebaseUser;
-    Future<UserModel> getUserData() async {
-      UserModel user =
-          await Auth().getUserData(FirebaseAuth.instance.currentUser!.uid);
-      setState(() {
-        userModel = user;
-      });
-      return user;
-    }
+  int? rating;
+  User? firebaseUser;
+  Future<UserModel> getUserData() async {
+    UserModel user =
+        await Auth().getUserData(FirebaseAuth.instance.currentUser!.uid);
+    setState(() {
+      userModel = user;
+    });
+    return user;
+  }
 
-    Future<void> getfirebaseUser() async {
-      User user = await FirebaseAuth.instance.currentUser!;
-      setState(() {
-        firebaseUser = user;
-      });
-    }
+  Future<void> getfirebaseUser() async {
+    User user = await FirebaseAuth.instance.currentUser!;
+    setState(() {
+      firebaseUser = user;
+    });
+  }
 
+  // @override
+  // void initState() {
 
-    // @override
-    // void initState() {
-      
-    //   super.initState();
-    // }
+  //   super.initState();
+  // }
   final _cmtController = TextEditingController();
   int? feedbackCardCount; // Initial number of feedback cards to display
   int? maxFeedbackCardCount; // Maximum number of feedback cards
@@ -65,7 +62,7 @@ class _TailorDetailsState extends State<TailorDetails> {
   @override
   void initState() {
     getUserData();
-      getfirebaseUser();
+    getfirebaseUser();
     _uid = FirebaseAuth.instance.currentUser!.uid;
     super.initState();
   }
@@ -383,10 +380,16 @@ class _TailorDetailsState extends State<TailorDetails> {
                             Expanded(
                               child: Align(
                                 alignment: Alignment.topRight,
-                                child: Icon(
-                                  Icons.star,
-                                  color: starColor,
-                                  size: size.height * 0.035,
+                                child: IconButton(
+                                  onPressed: () async {
+                                    _showRatingDialog(context);
+                                    // add rating into database
+                                  },
+                                  icon: Icon(
+                                    Icons.star,
+                                    color: starColor,
+                                    size: size.height * 0.035,
+                                  ),
                                 ),
                               ),
                             ),
@@ -880,6 +883,74 @@ class _TailorDetailsState extends State<TailorDetails> {
           ),
         ],
       ),
+    );
+  }
+
+  int selectedRating = 0;
+
+  void _showRatingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Rate Us'),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(5, (index) {
+              final int rating = index + 1;
+              return IconButton(
+                onPressed: () async {
+                  setState(() {
+                    selectedRating = rating;
+                  });
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('tailorProfile')
+                        .doc(widget.tailorProfileModel!.tailorId!)
+                        .collection('rating')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .set({
+                      'userRated': selectedRating,
+                      'timestamp': FieldValue.serverTimestamp(),
+                      'userId': FirebaseAuth.instance.currentUser!.uid,
+                    });
+                    showSnackBar(context, "You have rated $rating star(s).");
+
+                    // get all ratings of this tailor and calculate average rating
+                    final ratings = await FirebaseFirestore.instance
+                        .collection('tailorProfile')
+                        .doc(widget.tailorProfileModel!.tailorId!)
+                        .collection('rating')
+                        .get();
+                    dynamic totalRating = 0;
+                    for (var rating in ratings.docs) {
+                      totalRating += rating['userRated'];
+                    }
+
+                    double averageRating = (totalRating / ratings.docs.length);
+                    int intValue = averageRating.toInt();
+                
+                    await FirebaseFirestore.instance
+                        .collection('tailorProfile')
+                        .doc(widget.tailorProfileModel!.tailorId!)
+                        .update({
+                      'rating': intValue,
+                    });
+                  } catch (e) {
+                    showSnackBar(context, e.toString());
+                  }
+
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.star,
+                  color: rating <= selectedRating ? starColor : Colors.grey,
+                ),
+              );
+            }),
+          ),
+        );
+      },
     );
   }
 }
