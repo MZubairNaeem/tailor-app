@@ -42,7 +42,16 @@ class _InProcessState extends State<SellerCancel> {
                   ref.refresh(orderCancelledSeller);
                   return coaches.when(
                     data: (userModelList) {
-                      return ListView.builder(
+                      return userModelList.isEmpty
+                          ? const Center(
+                              child: Text(
+                              'No Orders Cancelled',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ))
+                          :  ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: userModelList.length,

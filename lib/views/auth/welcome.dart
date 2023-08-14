@@ -27,7 +27,7 @@ class _WelcomeState extends State<Welcome> {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * 0.1,
+                height: size.height * 0.05,
               ),
               const Align(
                 alignment: Alignment.centerLeft,
@@ -40,9 +40,12 @@ class _WelcomeState extends State<Welcome> {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              Image.asset("assets/Graphics/Welcome.png"),
+              Image.asset(
+                "assets/Graphics/Welcome.png",
+                height: size.height * 0.25,
+              ),
               SizedBox(
-                height: size.height * 0.05,
+                height: size.height * 0.035,
               ),
               const Text(
                 "Make Your Day",

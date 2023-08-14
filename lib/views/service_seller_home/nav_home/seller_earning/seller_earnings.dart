@@ -60,7 +60,16 @@ class _SellerEarningsState extends State<SellerEarnings> {
                     ref.refresh(orderCompleteSeller);
                     return coaches.when(
                       data: (userModelList) {
-                        return ListView.builder(
+                        return userModelList.isEmpty
+                          ? const Center(
+                              child: Text(
+                              'No Earnings Yet',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ))
+                          :  ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: userModelList.length,

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../Constants/colors.dart';
+
 class AIMeasurement extends StatefulWidget {
   @override
   _AIMeasurementPageState createState() => _AIMeasurementPageState();
@@ -55,6 +57,7 @@ class _AIMeasurementPageState extends State<AIMeasurement> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Body Measurement'),
+        backgroundColor: customPurple,
       ),
       body: Center(
         child: Column(
@@ -70,6 +73,10 @@ class _AIMeasurementPageState extends State<AIMeasurement> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: getImage,
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(customPurple),
+                foregroundColor:  MaterialStateProperty.all<Color>(customWhite),
+              ),
               child: Text('Open Camera to Capture'),
             ),
             SizedBox(height: 20),

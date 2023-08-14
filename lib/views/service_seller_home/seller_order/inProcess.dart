@@ -43,7 +43,16 @@ class _InProcessState extends State<SellerInProcess> {
                   // ref.refresh(orderInProcessSeller);
                   return coaches.when(
                     data: (userModelList) {
-                      return ListView.builder(
+                      return userModelList.isEmpty
+                          ? const Center(
+                              child: Text(
+                              'No Orders Yet',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ))
+                          :  ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: userModelList.length,

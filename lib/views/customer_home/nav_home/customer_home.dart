@@ -8,7 +8,6 @@ import "../../../view_models/providers/all_tailors_provider.dart";
 import "../../../widgets/snackbar.dart";
 import "../../../widgets/star_icon.dart";
 import "../../auth/login.dart";
-import "customer_home_screen/all_clothes.dart";
 
 class GuestHome extends StatefulWidget {
   const GuestHome({Key? key}) : super(key: key);
@@ -539,140 +538,148 @@ class _CustomerHomeState extends State<GuestHome> {
                     padding: EdgeInsets.only(
                       left: size.width * 0.03,
                     ),
-                    child: SizedBox(
-                        height: size.height * 0.17,
-                        width: size.width,
-                        child: Consumer(
-                          builder: (context, ref, _) {
-                            final coaches = ref.watch(allTailorProvider);
-                            ref.refresh(allTailorProvider);
-                            return coaches.when(
-                              data: (userModelList) {
-                                return ListView.builder(
-                                  itemCount: userModelList.length,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    final color = predefinedColors[
-                                        index % predefinedColors.length];
-                                    return SizedBox(
-                                      width: size.width * 0.47,
-                                      child: Card(
-                                        color: color,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            top: size.height * 0.01,
-                                            left: size.width * 0.03,
+                    child: GestureDetector(
+                      onTap: () {
+                        showSnackBar(context, "Login to view more");
+                      },
+                      child: SizedBox(
+                          height: size.height * 0.17,
+                          width: size.width,
+                          child: Consumer(
+                            builder: (context, ref, _) {
+                              final coaches = ref.watch(allTailorProvider);
+                              ref.refresh(allTailorProvider);
+                              return coaches.when(
+                                data: (userModelList) {
+                                  return ListView.builder(
+                                    itemCount: userModelList.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      final color = predefinedColors[
+                                          index % predefinedColors.length];
+                                      return SizedBox(
+                                        width: size.width * 0.47,
+                                        child: Card(
+                                          color: color,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
                                           ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              CircleAvatar(
-                                                backgroundImage: NetworkImage(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                              top: size.height * 0.01,
+                                              left: size.width * 0.03,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                    userModelList[index]
+                                                        .tailorImage!,
+                                                  ),
+                                                  radius: size.height * 0.028,
+                                                ),
+                                                SizedBox(
+                                                  height: size.height * 0.01,
+                                                ),
+                                                Text(
                                                   userModelList[index]
-                                                      .tailorImage!,
+                                                              .shopName!
+                                                              .length >
+                                                          20
+                                                      ? "${userModelList[index].shopName!.substring(0, 15)}..."
+                                                      : userModelList[index]
+                                                          .shopName!,
+                                                  style: TextStyle(
+                                                    fontSize:
+                                                        size.height * 0.018,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
                                                 ),
-                                                radius: size.height * 0.028,
-                                              ),
-                                              SizedBox(
-                                                height: size.height * 0.01,
-                                              ),
-                                              Text(
-                                                userModelList[index]
-                                                            .shopName!
-                                                            .length >
-                                                        20
-                                                    ? "${userModelList[index].shopName!.substring(0, 15)}..."
-                                                    : userModelList[index]
-                                                        .shopName!,
-                                                style: TextStyle(
-                                                  fontSize: size.height * 0.018,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.bottomCenter,
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                      horizontal:
-                                                          size.width * 0.03,
-                                                    ),
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                      bottom: 10.0,
-                                                    ),
-                                                    height: size.height * 0.035,
-                                                    decoration: BoxDecoration(
-                                                      color: customBlack,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.0),
-                                                    ),
-                                                    child: userModelList[index]
-                                                                .rating! ==
-                                                            0
-                                                        ? const Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              Text(
-                                                                "No Rating",
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          )
-                                                        : IntrinsicWidth(
-                                                            child: Row(
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.bottomCenter,
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                        horizontal:
+                                                            size.width * 0.03,
+                                                      ),
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                        bottom: 10.0,
+                                                      ),
+                                                      height:
+                                                          size.height * 0.035,
+                                                      decoration: BoxDecoration(
+                                                        color: customBlack,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                      ),
+                                                      child: userModelList[
+                                                                      index]
+                                                                  .rating! ==
+                                                              0
+                                                          ? const Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .center,
-                                                              children:
-                                                                  List.generate(
-                                                                (userModelList[
-                                                                        index]
-                                                                    .rating!),
-                                                                (index) =>
-                                                                    const StarIcon(),
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                Text(
+                                                                  "No Rating",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          : IntrinsicWidth(
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: List
+                                                                    .generate(
+                                                                  (userModelList[
+                                                                          index]
+                                                                      .rating!),
+                                                                  (index) =>
+                                                                      const StarIcon(),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                              error: (error, stackTrace) =>
-                                  const Text('Reload'),
-                              loading: () => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          },
-                        )),
+                                      );
+                                    },
+                                  );
+                                },
+                                error: (error, stackTrace) =>
+                                    const Text('Reload'),
+                                loading: () => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            },
+                          )),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
@@ -721,128 +728,140 @@ class _CustomerHomeState extends State<GuestHome> {
                           padding: EdgeInsets.only(
                             left: size.width * 0.02,
                           ),
-                          child: SizedBox(
-                            height: size.height * 0.29,
-                            width: size.width,
-                            child: Consumer(
-                              builder: (context, ref, _) {
-                                final product = ref.watch(allFebricProvider);
-                                ref.refresh(allFebricProvider);
-                                return product.when(
-                                  data: (data) {
-                                    print(data.length);
-                                    int count = data.length;
-                                    return count > 0
-                                        ? ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: data.length,
-                                            itemBuilder: (context, index) {
-                                              return Padding(
-                                                padding: EdgeInsets.only(
-                                                  top: size.height * 0.01,
-                                                  left: size.width * 0.03,
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.0),
-                                                      child: Image.network(
-                                                        data[index]
-                                                            .productImage!,
-                                                        width:
-                                                            size.width * 0.45,
-                                                        height:
-                                                            size.height * 0.2,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                        left: size.width * 0.01,
-                                                        top: size.height * 0.01,
-                                                      ),
-                                                      child: Text(
-                                                        data[index]
-                                                            .productName!,
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              size.height *
-                                                                  0.02,
-                                                          fontWeight:
-                                                              FontWeight.w500,
+                          child: GestureDetector(
+                            onTap: () {
+                              showSnackBar(context, "Login to view more");
+                            },
+                            child: SizedBox(
+                              height: size.height * 0.29,
+                              width: size.width,
+                              child: Consumer(
+                                builder: (context, ref, _) {
+                                  final product = ref.watch(allFebricProvider);
+                                  ref.refresh(allFebricProvider);
+                                  return product.when(
+                                    data: (data) {
+                                      print(data.length);
+                                      int count = data.length;
+                                      return count > 0
+                                          ? ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: data.length,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                    top: size.height * 0.01,
+                                                    left: size.width * 0.03,
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                        child: Image.network(
+                                                          data[index]
+                                                              .productImage!,
+                                                          width:
+                                                              size.width * 0.45,
+                                                          height:
+                                                              size.height * 0.2,
+                                                          fit: BoxFit.cover,
                                                         ),
                                                       ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                        left: size.width * 0.01,
-                                                        top: size.height * 0.01,
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            "Rs. ${data[index].productPrice!}",
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  size.height *
-                                                                      0.018,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              color:
-                                                                  customPurple,
-                                                            ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left:
+                                                              size.width * 0.01,
+                                                          top: size.height *
+                                                              0.01,
+                                                        ),
+                                                        child: Text(
+                                                          data[index]
+                                                              .productName!,
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                size.height *
+                                                                    0.02,
+                                                            fontWeight:
+                                                                FontWeight.w500,
                                                           ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    right: size
-                                                                            .width *
-                                                                        0.01),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children:
-                                                                  List.generate(
-                                                                0,
-                                                                (index) =>
-                                                                    const StarIcon(),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left:
+                                                              size.width * 0.01,
+                                                          top: size.height *
+                                                              0.01,
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              "Rs. ${data[index].productPrice!}",
+                                                              style: TextStyle(
+                                                                fontSize:
+                                                                    size.height *
+                                                                        0.018,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color:
+                                                                    customPurple,
                                                               ),
                                                             ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        : const Center(
-                                            child: Text("No Item Added"),
-                                          );
-                                  },
-                                  loading: () => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  error: (e, s) {
-                                    return Center(
-                                      child: Text(e.toString()),
-                                    );
-                                  },
-                                );
-                              },
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      right: size
+                                                                              .width *
+                                                                          0.01),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .end,
+                                                                children: List
+                                                                    .generate(
+                                                                  0,
+                                                                  (index) =>
+                                                                      const StarIcon(),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : const Center(
+                                              child: Text("No Item Added"),
+                                            );
+                                    },
+                                    loading: () => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    error: (e, s) {
+                                      return Center(
+                                        child: Text(e.toString()),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         );
@@ -886,123 +905,141 @@ class _CustomerHomeState extends State<GuestHome> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: size.width * 0.02, right: size.width * 0.02),
-                    child: Consumer(
-      builder: (context, ref, _) {
-        final product = ref.watch(allClothesProvider);
-        ref.refresh(allClothesProvider);
-        return product.when(
-          data: (data) {
-            print(data.length);
-            int count = data.length;
-            return count > 0
-                ? GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: size.width * 0.01,
-                      mainAxisSpacing: size.height * 0.01,
-                      childAspectRatio: size.width / (size.height * 0.7),
-                    ),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: count,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          top: size.height * 0.01,
-                        ),
-                        child: Card(
-                          elevation: size.height * 0.01,
-                          child: Column(
-                            children: [
-                              Image.network(
-                                data[index].productImage!,
-                                width: size.width * 0.5,
-                                height: size.height * 0.2,
-                                fit: BoxFit.fill,
-                              ),
-                              SizedBox(
-                                height: size.height * 0.01,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: size.width * 0.01,
-                                  right: size.width * 0.01,
-                                ),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    data[index].productName!,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize: size.height * 0.015,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.01,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: size.width * 0.01,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          "Rs. ${data[index].productPrice!}",
-                                          style: TextStyle(
-                                            fontSize: size.height * 0.015,
-                                            fontWeight: FontWeight.w500,
-                                            color: customPurple,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          right: size.width * 0.01),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: List.generate(
-                                          0,
-                                          (index) => const StarIcon(),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
+                  GestureDetector(
+                    onTap: () {
+                      showSnackBar(context, "Login to view more");
                     },
-                  )
-                : const Center(
-                    child: Text("No Item Added"),
-                  );
-          },
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
-          error: (e, s) {
-            return Center(
-              child: Text(e.toString()),
-            );
-          },
-        );
-      },
-    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: size.width * 0.02, right: size.width * 0.02),
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final product = ref.watch(allClothesProvider);
+                          ref.refresh(allClothesProvider);
+                          return product.when(
+                            data: (data) {
+                              print(data.length);
+                              int count = data.length;
+                              return count > 0
+                                  ? GridView.builder(
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: size.width * 0.01,
+                                        mainAxisSpacing: size.height * 0.01,
+                                        childAspectRatio:
+                                            size.width / (size.height * 0.7),
+                                      ),
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: count,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                            top: size.height * 0.01,
+                                          ),
+                                          child: Card(
+                                            elevation: size.height * 0.01,
+                                            child: Column(
+                                              children: [
+                                                Image.network(
+                                                  data[index].productImage!,
+                                                  width: size.width * 0.5,
+                                                  height: size.height * 0.2,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                                SizedBox(
+                                                  height: size.height * 0.01,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                    left: size.width * 0.01,
+                                                    right: size.width * 0.01,
+                                                  ),
+                                                  child: Align(
+                                                    alignment: Alignment.topLeft,
+                                                    child: Text(
+                                                      data[index].productName!,
+                                                      textAlign: TextAlign.start,
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            size.height * 0.015,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: size.height * 0.01,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                    left: size.width * 0.01,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: Text(
+                                                            "Rs. ${data[index].productPrice!}",
+                                                            style: TextStyle(
+                                                              fontSize:
+                                                                  size.height *
+                                                                      0.015,
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                              color: customPurple,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(
+                                                            right: size.width *
+                                                                0.01),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: List.generate(
+                                                            0,
+                                                            (index) =>
+                                                                const StarIcon(),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : const Center(
+                                      child: Text("No Item Added"),
+                                    );
+                            },
+                            loading: () => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            error: (e, s) {
+                              return Center(
+                                child: Text(e.toString()),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     height: 30.0,

@@ -5,6 +5,7 @@ import 'package:ect/view_models/providers/cart_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -647,6 +648,8 @@ class _CustomerCartState extends State<CustomerCart> {
 
   Future<void> _showRatingDialog(BuildContext context, String name,
       String price, String tailorID, String productId, String number) async {
+    bool cod = false;
+    bool online = false;
     final size = MediaQuery.of(context).size;
     showDialog(
       context: context,
@@ -663,12 +666,12 @@ class _CustomerCartState extends State<CustomerCart> {
                       color: iconColor,
                       fontWeight: FontWeight.bold,
                     )),
-                SizedBox(
-                  width: size.width * 0.45,
+                Expanded(
                   child: Text(
                     name,
                     textAlign: TextAlign.center,
                     softWrap: true,
+                    overflow: TextOverflow.clip,
                   ),
                 ),
               ],
@@ -682,7 +685,14 @@ class _CustomerCartState extends State<CustomerCart> {
                       color: iconColor,
                       fontWeight: FontWeight.bold,
                     )),
-                Text(price),
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    price,
+                    softWrap: true,
+                    overflow: TextOverflow.clip,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: size.height * 0.01),
@@ -704,33 +714,76 @@ class _CustomerCartState extends State<CustomerCart> {
                                   color: iconColor,
                                   fontWeight: FontWeight.bold,
                                 )),
-                            Text(userModel.username!),
+                            Expanded(
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                userModel.username!,
+                                softWrap: true,
+                                overflow: TextOverflow.clip,
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(height: size.height * 0.01),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text('Your Address: ',
-                                style: TextStyle(
-                                  color: iconColor,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            Text(userModel.address!),
+                            const Text(
+                              'Your Address: ',
+                              style: TextStyle(
+                                color: iconColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                userModel.address!,
+                                textAlign: TextAlign.center,
+                                softWrap: true,
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(height: size.height * 0.01),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Payment Method: ',
+                              style: TextStyle(
+                                color: iconColor,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        Column(
                           children: [
-                            Text('Payment Method: ',
-                                style: TextStyle(
-                                  color: iconColor,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            Column(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                Checkbox(
+                                    fillColor: MaterialStateColor.resolveWith(
+                                        (states) => customPurple),
+                                    value: cod,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        cod = value!;
+                                        online = false;
+                                      });
+                                    }),
                                 Text('Cash on Delivery'),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Checkbox(
+                                    fillColor: MaterialStateColor.resolveWith(
+                                        (states) => customPurple),
+                                    value: online,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        online = value!;
+                                        cod = false;
+                                      });
+                                    }),
                                 Text('Via Easypaisa'),
                               ],
                             ),
@@ -861,6 +914,38 @@ class _CustomerCartState extends State<CustomerCart> {
                 setState(() {
                   load = true;
                 });
+                if (online == true && _image == null) {
+                  Fluttertoast.showToast(
+                      msg: "Please upload payment screenshot",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      backgroundColor: customOrange,
+                      content: Text('Please upload payment screenshot',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  );
+                  setState(() {
+                    load = false;
+                  });
+                  return;
+                } else if (cod == false && online == false) {
+                  Fluttertoast.showToast(
+                      msg: "Please select payment method",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      fontSize: 16.0);
+                  setState(() {
+                    load = false;
+                  });
+                  return;
+                }
                 if (_image != null) {
                   paymentSS = await StorageMethod().uploadImageToStorage(
                       'PaymentScreenShots', _image!, orderId);

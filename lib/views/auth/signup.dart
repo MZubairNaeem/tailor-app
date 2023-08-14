@@ -35,7 +35,6 @@ class _SignUpState extends State<SignUp> {
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(height: size.height * 0.02),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -52,7 +51,10 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               SizedBox(height: size.height * 0.07),
-              Image.asset("assets/Graphics/signupi.png"),
+              Image.asset(
+                "assets/Graphics/signupi.png",
+                height: size.height * 0.20,
+              ),
               SizedBox(height: size.height * 0.07),
               Container(
                 decoration: const BoxDecoration(

@@ -581,6 +581,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                               TextButton(
                                 onPressed: () async {
                                   try {
+                                    Navigator.of(context).pop();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

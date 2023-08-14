@@ -32,13 +32,10 @@ class _LoginState extends State<Login> {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * 0.57,
+                height: size.height * 0.50,
                 width: double.infinity,
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: size.height * 0.05,
-                    ),
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -60,9 +57,7 @@ class _LoginState extends State<Login> {
                     ),
                     Image.asset(
                       "assets/Graphics/login.png",
-                    ),
-                    SizedBox(
-                      height: size.height * 0.03,
+                      height: size.height * 0.25,
                     ),
                   ],
                 ),
@@ -165,7 +160,7 @@ class _LoginState extends State<Login> {
                               keyboardType: TextInputType.visiblePassword,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                      return "Please enter your Password";
+                                  return "Please enter your Password";
                                 }
                                 // You can add more validation logic here if needed
                                 return null;
