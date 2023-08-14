@@ -145,7 +145,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AIMeasurement(),
+                        builder: (context) =>  AIMeasurement(),
                       ),
                     );
                   },

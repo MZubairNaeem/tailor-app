@@ -1,133 +1,87 @@
-import 'dart:typed_data';
-
-import 'package:ect/Constants/colors.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../widgets/image_picker.dart';
-import '../../../../widgets/snackbar.dart';
-import 'package:http/http.dart' as http;
-import 'dart:io';
 class AIMeasurement extends StatefulWidget {
-  const AIMeasurement({super.key});
-
   @override
-  State<AIMeasurement> createState() => _AIMeasurementState();
+  _AIMeasurementPageState createState() => _AIMeasurementPageState();
 }
 
-class _AIMeasurementState extends State<AIMeasurement> {
-  
+class _AIMeasurementPageState extends State<AIMeasurement> {
   File? _image;
-  bool load = false;
-  void selectImage() async {
-    try {
-      print("object");
-      setState(() {
-        load = true;
-      });
-      File im = await pickImage(ImageSource.camera);
+  String _responseText = '';
 
+  Future<void> getImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
+
+  Future<void> callApiWithImage() async {
+    if (_image == null) {
       setState(() {
-        _image = im;
+        _responseText = 'Please select an image first.';
       });
+      return;
+    }
+
+    final Uri apiUrl = Uri.parse(
+        'http://10.0.2.2:8000/predict/'); // Replace with your Flask API URL
+
+    var request = http.MultipartRequest('POST', apiUrl);
+    request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
+
+    try {
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
       setState(() {
-        load = false;
+        _responseText = responseBody;
       });
     } catch (e) {
       setState(() {
-        load = false;
+        _responseText = 'Error: $e';
       });
-      showSnackBar(context, "error");
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: customPurple,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          "Set your Position",
-          style: TextStyle(
-            fontSize: size.height * 0.03,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: Text('Body Measurement'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-          child: Column(
-            children: [
-              Image.asset(
-                "assets/Graphics/ai_measurement.png",
-                width: size.width * 0.7,
-                height: size.height * 0.65,
-                fit: BoxFit.contain,
-              ),
-              Text(
-                "Place your device against the wall, your body must fit into the frame",
-                style: TextStyle(
-                  fontSize: size.height * 0.023,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.06,
-              ),
-              InkWell(
-                onTap: () {
-                  selectImage();
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const YourMeasurements(),
-                  //   ),
-                  // );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "NEXT ",
-                      style: TextStyle(
-                        fontSize: size.height * 0.034,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xff5E4AD1),
-                      ),
-                    ),
-                    Icon(
-                      Icons.double_arrow,
-                      color: const Color(0xffFEB448),
-                      grade: size.height * 0.024,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _image == null
+                ? Text('No image selected.')
+                : Image.file(
+                    _image!,
+              height: 200,
+              width: 100,
+                  ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: getImage,
+              child: Text('Open Camera to Capture'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: callApiWithImage,
+              child: const Text('Measure now'),
+            ),
+            SizedBox(height: 20),
+            Text(_responseText),
+          ],
         ),
       ),
     );
   }
-
-Future<void> sendImage(File _image) async {
-  var uri = Uri.parse("http://192.168.100.136:8000/predict/");
-
-  var request = http.MultipartRequest('POST', uri)
-    ..files.add(await http.MultipartFile.fromPath('file', _image.path));
-
-  var response = await request.send();
-
-  if (response.statusCode == 200) {
-    print("Image uploaded successfully!");
-//yahan response process kr skty
-  } else {
-    print("Failed to upload image!");
-  }
-}
-
 }
