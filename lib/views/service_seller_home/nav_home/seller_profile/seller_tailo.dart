@@ -31,7 +31,7 @@ class _SellerTailorState extends State<SellerTailor> {
                 .watch(tailorProvider(FirebaseAuth.instance.currentUser!.uid));
             return userResult.when(
               data: (userModel) {
-                return Expanded(
+                return SizedBox(
                   child: Container(
                     margin: EdgeInsets.only(
                       left: size.width * 0.02,

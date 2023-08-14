@@ -377,7 +377,7 @@ class _TailorDetailsState extends State<TailorDetails> {
                                 ),
                               ],
                             ),
-                            Expanded(
+                            SizedBox(
                               child: Align(
                                 alignment: Alignment.topRight,
                                 child: IconButton(
@@ -403,7 +403,7 @@ class _TailorDetailsState extends State<TailorDetails> {
                             ),
                           ],
                         ),
-                        Expanded(
+                        SizedBox(
                           child: Align(
                             alignment: Alignment.bottomLeft,
                             child: Row(
@@ -439,7 +439,7 @@ class _TailorDetailsState extends State<TailorDetails> {
                                     ref.refresh(userProvider(_uid));
                                     return userResult.when(
                                       data: (userModel) {
-                                        return Expanded(
+                                        return SizedBox(
                                           child: Align(
                                             alignment: Alignment.topRight,
                                             child: IconButton(
@@ -779,7 +779,7 @@ class _TailorDetailsState extends State<TailorDetails> {
                               SizedBox(
                                 width: size.width * 0.22,
                               ),
-                              Expanded(
+                              SizedBox(
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(

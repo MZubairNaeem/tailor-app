@@ -48,6 +48,9 @@ dependencies:
   geolocator: ^9.0.2
   geocoding: ^2.1.0
   flutter_spinbox: ^0.13.1
+  crypto: ^3.0.3
+  http: ^1.1.0
+  fluttertoast: ^8.2.2
 
 dev_dependencies:
   flutter_test:

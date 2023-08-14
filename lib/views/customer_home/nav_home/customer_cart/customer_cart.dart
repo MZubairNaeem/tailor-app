@@ -1,12 +1,19 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ect/view_models/providers/cart_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../Constants/colors.dart';
+import '../../../../view_models/controllers/storage_method.dart';
+import '../../../../view_models/providers/tailor_prfile_provider.dart';
 import '../../../../view_models/providers/user_provider.dart';
+import '../../../../widgets/image_picker.dart';
+import '../../../../widgets/snackbar.dart';
 import '../bottom_nav_bar.dart';
 
 class CustomerCart extends StatefulWidget {
@@ -22,6 +29,7 @@ class _CustomerCartState extends State<CustomerCart> {
   String? productId;
 
   String? userId;
+
   @override
   initState() {
     userId = FirebaseAuth.instance.currentUser!.uid;
@@ -29,8 +37,35 @@ class _CustomerCartState extends State<CustomerCart> {
     super.initState();
   }
 
+  Uint8List? _image;
+  bool load = false;
+
+  void selectImage() async {
+    try {
+      print("object");
+      setState(() {
+        load = true;
+      });
+      Uint8List im = await pickImage(ImageSource.gallery);
+
+      setState(() {
+        _image = im;
+      });
+
+      setState(() {
+        load = false;
+      });
+    } catch (e) {
+      setState(() {
+        load = false;
+      });
+      showSnackBar(context, "error");
+    }
+  }
+
   int productQuantity = 1;
   int qty = 1;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -451,230 +486,41 @@ class _CustomerCartState extends State<CustomerCart> {
                                                                   ),
                                                                   Row(
                                                                     children: [
-                                                                      ElevatedButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          showDialog(
-                                                                            context:
-                                                                                context,
-                                                                            builder: (context) =>
-                                                                                AlertDialog(
-                                                                              title: const Text('Confirm order details'),
-                                                                              content: Column(
-                                                                                mainAxisSize: MainAxisSize.min,
-                                                                                children: [
-                                                                                  Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                                    children: [
-                                                                                      const Text('Item Name: ',
-                                                                                          style: TextStyle(
-                                                                                            color: iconColor,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                          )),
-                                                                                      Text(userModelList[index].productName!),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: size.height * 0.01),
-                                                                                  Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                                    children: [
-                                                                                      const Text('Price: ',
-                                                                                          style: TextStyle(
-                                                                                            color: iconColor,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                          )),
-                                                                                      Text(userModelList[index].productPrice!.toString()),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(height: size.height * 0.01),
-                                                                                  Consumer(
-                                                                                    builder: (context, ref, _) {
-                                                                                      // Getting coaches List
-                                                                                      final coaches = ref.watch(userProvider(userId));
-                                                                                      ref.refresh(userProvider(userId));
-                                                                                      return coaches.when(
-                                                                                        data: (userModel) {
-                                                                                          return Column(
-                                                                                            mainAxisSize: MainAxisSize.min,
-                                                                                            children: [
-                                                                                              Row(
-                                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                children: [
-                                                                                                  const Text('Your Name: ',
-                                                                                                      style: TextStyle(
-                                                                                                        color: iconColor,
-                                                                                                        fontWeight: FontWeight.bold,
-                                                                                                      )),
-                                                                                                  Text(userModel.username!),
-                                                                                                ],
-                                                                                              ),
-                                                                                              SizedBox(height: size.height * 0.01),
-                                                                                              Row(
-                                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                children: [
-                                                                                                  const Text('Your Address: ',
-                                                                                                      style: TextStyle(
-                                                                                                        color: iconColor,
-                                                                                                        fontWeight: FontWeight.bold,
-                                                                                                      )),
-                                                                                                  Text(userModel.address!),
-                                                                                                ],
-                                                                                              ),
-                                                                                              SizedBox(height: size.height * 0.01),
-                                                                                              const Row(
-                                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                children: [
-                                                                                                  Text('Payment Method: ',
-                                                                                                      style: TextStyle(
-                                                                                                        color: iconColor,
-                                                                                                        fontWeight: FontWeight.bold,
-                                                                                                      )),
-                                                                                                  Text('Cash on Delivery'),
-                                                                                                ],
-                                                                                              ),
-                                                                                            ],
-                                                                                          );
-                                                                                        },
-                                                                                        error: (error, stackTrace) => Text('Error: $error'),
-                                                                                        loading: () => const Center(
-                                                                                          child: CircularProgressIndicator(),
-                                                                                        ),
-                                                                                      );
-                                                                                    },
-                                                                                  ),
-                                                                                  SizedBox(height: size.height * 0.01),
-                                                                                  // Row(
-                                                                                  //   mainAxisAlignment: MainAxisAlignment.center,
-                                                                                  //   children: [
-                                                                                  //     const Text(
-                                                                                  //       'Quantity: ',
-                                                                                  //       style: TextStyle(
-                                                                                  //         color: iconColor,
-                                                                                  //         fontWeight: FontWeight.bold,
-                                                                                  //       ),
-                                                                                  //     ),
-                                                                                  //     SizedBox(height: size.height * 0.01),
-                                                                                  //     InkWell(
-                                                                                  //       onTap: () {
-                                                                                  //         setState(() {
-                                                                                  //           if (productQuantity > 1) {
-                                                                                  //             productQuantity = (productQuantity - 1);
-                                                                                  //             qty = productQuantity;
-                                                                                  //           }
-                                                                                  //         });
-                                                                                  //       },
-                                                                                  //       child: const Icon(
-                                                                                  //         Icons.remove,
-                                                                                  //         color: customBlack,
-                                                                                  //       ),
-                                                                                  //     ),
-                                                                                  //     SizedBox(
-                                                                                  //       width: size.height * 0.005,
-                                                                                  //     ),
-                                                                                  //     Container(
-                                                                                  //       padding: EdgeInsets.symmetric(
-                                                                                  //         horizontal: size.width * 0.02,
-                                                                                  //       ),
-                                                                                  //       color: Colors.grey[200],
-                                                                                  //       height: size.height * 0.03,
-                                                                                  //       child: Center(
-                                                                                  //         child: Text(
-                                                                                  //           productQuantity.toString(),
-                                                                                  //           textAlign: TextAlign.center,
-                                                                                  //           style: TextStyle(
-                                                                                  //             fontSize: size.height * 0.02,
-                                                                                  //             fontWeight: FontWeight.w700,
-                                                                                  //             color: iconColor,
-                                                                                  //           ),
-                                                                                  //         ),
-                                                                                  //       ),
-                                                                                  //     ),
-                                                                                  //     SizedBox(
-                                                                                  //       width: size.height * 0.01,
-                                                                                  //     ),
-                                                                                  //     InkWell(
-                                                                                  //       onTap: () {
-                                                                                  //         setState(() {
-                                                                                  //           productQuantity = (productQuantity + 1);
-                                                                                  //           qty = (productQuantity);
-                                                                                  //         });
-                                                                                  //       },
-                                                                                  //       child: const Icon(
-                                                                                  //         Icons.add,
-                                                                                  //         color: customBlack,
-                                                                                  //       ),
-                                                                                  //     ),
-                                                                                  //   ],
-                                                                                  // ),
-                                                                                  SizedBox(height: size.height * 0.01),
-                                                                                  Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                                    children: [
-                                                                                      const Text('Total: ',
-                                                                                          style: TextStyle(
-                                                                                            color: iconColor,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                          )),
-                                                                                      total == 0.0 ? Text(userModelList[index].productPrice!.toString()) : Text(total.toString()),
-                                                                                    ],
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              actions: [
-                                                                                TextButton(
-                                                                                  style: TextButton.styleFrom(
-                                                                                    foregroundColor: Colors.black,
-                                                                                  ),
-                                                                                  onPressed: () {
-                                                                                    Navigator.of(context).pop();
-                                                                                  },
-                                                                                  child: const Text('Cancel'),
+                                                                      Consumer(
+                                                                        builder: (context,
+                                                                            ref,
+                                                                            _) {
+                                                                          final userResult =
+                                                                              ref.watch(tailorProvider(
+                                                                            userModelList[index].tailorId!,
+                                                                          ));
+                                                                          ref.refresh(
+                                                                              tailorProvider(
+                                                                            userModelList[index].tailorId!,
+                                                                          ));
+                                                                          return userResult
+                                                                              .when(
+                                                                            data:
+                                                                                (userModel) {
+                                                                              return ElevatedButton(
+                                                                                onPressed: () {
+                                                                                  _showRatingDialog(context, userModelList[index].productName!, userModelList[index].productPrice!.toString(), userModelList[index].tailorId!, userModelList[index].productId!, userModel.tailorNumber!);
+                                                                                },
+                                                                                style: ElevatedButton.styleFrom(backgroundColor: customPurple),
+                                                                                child: const Text(
+                                                                                  "Place Order",
+                                                                                  style: TextStyle(color: Colors.white),
                                                                                 ),
-                                                                                TextButton(
-                                                                                  style: TextButton.styleFrom(
-                                                                                    foregroundColor: Colors.white,
-                                                                                    backgroundColor: customPurple,
-                                                                                  ),
-                                                                                  onPressed: () async {
-                                                                                    String orderId = const Uuid().v1();
-                                                                                    try {
-                                                                                      await FirebaseFirestore.instance.collection('Orders').doc(orderId).set({
-                                                                                        'orderId': orderId,
-                                                                                        'sellerId': userModelList[index].tailorId,
-                                                                                        'productId': userModelList[index].productId,
-                                                                                        'qty': qty,
-                                                                                        'customerId': userId,
-                                                                                        'orderDate': DateTime.now(),
-                                                                                        'customerOrderStatus': 'InProcess',
-                                                                                        'sellerOrderStatus': 'InProcess',
-                                                                                      });
-                                                                                      Navigator.of(context).pop();
-                                                                                      ScaffoldMessenger.of(context).showSnackBar(
-                                                                                        const SnackBar(
-                                                                                          backgroundColor: customOrange,
-                                                                                          content: Text('Order Placed Successfully', style: TextStyle(color: Colors.white)),
-                                                                                        ),
-                                                                                      );
-                                                                                    } catch (e) {
-                                                                                      print(e);
-                                                                                    }
-                                                                                  },
-                                                                                  child: const Text('Confirm Order'),
-                                                                                ),
-                                                                              ],
-                                                                            ),
+                                                                              );
+                                                                            },
+                                                                            loading: () =>
+                                                                                const Text("..."),
+                                                                            error: (error, stackTrace) =>
+                                                                                Text('Error: $error'),
                                                                           );
                                                                         },
-                                                                        style: ElevatedButton.styleFrom(
-                                                                            backgroundColor:
-                                                                                customPurple),
-                                                                        child:
-                                                                            const Text(
-                                                                          "Place Order",
-                                                                          style:
-                                                                              TextStyle(color: Colors.white),
-                                                                        ),
                                                                       ),
+
                                                                       // InkWell(
                                                                       //   onTap:
                                                                       //       () {
@@ -795,6 +641,270 @@ class _CustomerCartState extends State<CustomerCart> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> _showRatingDialog(BuildContext context, String name,
+      String price, String tailorID, String productId, String number) async {
+    final size = MediaQuery.of(context).size;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm order details'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Item Name: ',
+                    style: TextStyle(
+                      color: iconColor,
+                      fontWeight: FontWeight.bold,
+                    )),
+                SizedBox(
+                  width: size.width * 0.45,
+                  child: Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Price: ',
+                    style: TextStyle(
+                      color: iconColor,
+                      fontWeight: FontWeight.bold,
+                    )),
+                Text(price),
+              ],
+            ),
+            SizedBox(height: size.height * 0.01),
+            Consumer(
+              builder: (context, ref, _) {
+                // Getting coaches List
+                final coaches = ref.watch(userProvider(userId));
+                ref.refresh(userProvider(userId));
+                return coaches.when(
+                  data: (userModel) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Your Name: ',
+                                style: TextStyle(
+                                  color: iconColor,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            Text(userModel.username!),
+                          ],
+                        ),
+                        SizedBox(height: size.height * 0.01),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Your Address: ',
+                                style: TextStyle(
+                                  color: iconColor,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            Text(userModel.address!),
+                          ],
+                        ),
+                        SizedBox(height: size.height * 0.01),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Payment Method: ',
+                                style: TextStyle(
+                                  color: iconColor,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            Column(
+                              children: [
+                                Text('Cash on Delivery'),
+                                Text('Via Easypaisa'),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: size.height * 0.01),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('EasyPaisa: ',
+                                style: TextStyle(
+                                  color: iconColor,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            Text(number),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                  error: (error, stackTrace) => Text('Error: $error'),
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              },
+            ),
+            SizedBox(height: size.height * 0.01),
+            SizedBox(height: size.height * 0.01),
+            _image != null
+                ? Container(
+                    margin: EdgeInsets.only(top: size.height * 0.01),
+                    height: size.height * 0.2,
+                    width: size.width * 0.6,
+                    decoration: BoxDecoration(
+                      shape: BoxShape
+                          .rectangle, // Set the shape of the box as rectangle
+                      borderRadius: BorderRadius.circular(
+                          12.0), // Set the border radius for rounded corners
+                      // image: DecorationImage(
+                      //   image: MemoryImage(
+                      //       _image!), // Use MemoryImage to display the Uint8List image
+                      //   fit: BoxFit
+                      //       .cover, // Adjust the fit of the image within the box
+                      // ),
+                    ),
+                    child: Image.memory(
+                      _image!,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Container(),
+            _image != null
+                ? TextButton(
+                    onPressed: () async {
+                      setState(() {
+                        load = true;
+                      });
+                      selectImage();
+                      //show image imediately after selecting
+                      Future.delayed(const Duration(seconds: 2), () {
+                        Navigator.of(context).pop();
+                        _showRatingDialog(
+                            context, name, price, tailorID, productId, number);
+                      });
+                      setState(() {
+                        load = false;
+                      });
+                    },
+                    child: const Text(
+                      "Choose other image",
+                      style: TextStyle(color: customPurple, fontSize: 16),
+                    ),
+                  )
+                : TextButton(
+                    onPressed: () async {
+                      setState(() {
+                        load = true;
+                      });
+                      selectImage();
+                      //show image imediately after selecting
+                      Future.delayed(const Duration(seconds: 2), () {
+                        Navigator.of(context).pop();
+                        _showRatingDialog(
+                            context, name, price, tailorID, productId, number);
+                      });
+                      setState(() {
+                        load = false;
+                      });
+                    },
+                    child: const Text(
+                      "Upload payment Screenshot",
+                      style: TextStyle(color: customPurple, fontSize: 16),
+                    ),
+                  ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Total: ',
+                    style: TextStyle(
+                      color: iconColor,
+                      fontWeight: FontWeight.bold,
+                    )),
+                total == 0.0 ? Text(price) : Text(total.toString()),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: customPurple,
+            ),
+            onPressed: () async {
+              String orderId = const Uuid().v1();
+              String? paymentSS;
+              try {
+                setState(() {
+                  load = true;
+                });
+                if (_image != null) {
+                  paymentSS = await StorageMethod().uploadImageToStorage(
+                      'PaymentScreenShots', _image!, orderId);
+                }
+                await FirebaseFirestore.instance
+                    .collection('Orders')
+                    .doc(orderId)
+                    .set({
+                  'orderId': orderId,
+                  'sellerId': tailorID,
+                  'productId': productId,
+                  'qty': qty,
+                  'customerId': userId,
+                  'orderDate': DateTime.now(),
+                  'customerOrderStatus': 'InProcess',
+                  'sellerOrderStatus': 'InProcess',
+                  'paymentSS': _image != null ? paymentSS : null,
+                });
+                setState(() {
+                  load = false;
+                });
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    backgroundColor: customOrange,
+                    content: Text('Order Placed Successfully',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                );
+              } catch (e) {
+                setState(() {
+                  load = false;
+                });
+                showSnackBar(context, e.toString());
+              }
+            },
+            child: load
+                ? const Center(
+                    child: CircularProgressIndicator(
+                    color: customOrange,
+                  ))
+                : const Text('Confirm Order'),
+          ),
+        ],
       ),
     );
   }

@@ -57,96 +57,96 @@ class _SellerHomeState extends State<SellerHome> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              margin: const EdgeInsets.only(top: 30.0, bottom: 50.0),
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              height: size.height * 0.15,
-              width: size.width * 0.8,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  10.0,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 30.0, bottom: 50.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                height: size.height * 0.15,
+                width: size.width * 0.8,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    10.0,
+                  ),
+                  color: pinkShade.withOpacity(
+                    0.5,
+                  ),
                 ),
-                color: pinkShade.withOpacity(
-                  0.5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Total Earning",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        Text(
+                          "600",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Image.asset(
+                      "assets/Graphics/earnings.png",
+                      width: 64,
+                      height: 64,
+                    ),
+                  ],
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Total Earning",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      Text(
-                        "600",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+                  const Text(
+                    "Recent Orders",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  Image.asset(
-                    "assets/Graphics/earnings.png",
-                    width: 64,
-                    height: 64,
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SellerOrderScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "See All",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: customBlack,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Recent Orders",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SellerOrderScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "See All",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: customBlack,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SingleChildScrollView(
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Consumer(
                 builder: (context, ref, _) {
                   // Getting coaches List
                   final coaches = ref.watch(orderInProcessSeller);
-                  ref.refresh(orderInProcessSeller);
+                  // ref.refresh(orderInProcessSeller);
                   return coaches.when(
                     data: (userModelList) {
                       return ListView.builder(
@@ -180,8 +180,8 @@ class _SellerHomeState extends State<SellerHome> {
                                               productProvider(
                                                   userModelList[index]
                                                       .productId));
-                                          ref.refresh(productProvider(
-                                              userModelList[index].productId));
+                                          // ref.refresh(productProvider(
+                                          //     userModelList[index].productId));
                                           return coaches.when(
                                             data: (product) {
                                               return Text(
@@ -212,9 +212,9 @@ class _SellerHomeState extends State<SellerHome> {
                                                   productProvider(
                                                       userModelList[index]
                                                           .productId));
-                                              ref.refresh(productProvider(
-                                                  userModelList[index]
-                                                      .productId));
+                                              // ref.refresh(productProvider(
+                                              //     userModelList[index]
+                                              //         .productId));
                                               return coaches.when(
                                                 data: (product) {
                                                   return Padding(
@@ -251,9 +251,9 @@ class _SellerHomeState extends State<SellerHome> {
                                                         tailorProvider(
                                                             userModelList[index]
                                                                 .sellerId));
-                                                    ref.refresh(tailorProvider(
-                                                        userModelList[index]
-                                                            .sellerId));
+                                                    // ref.refresh(tailorProvider(
+                                                    //     userModelList[index]
+                                                    //         .sellerId));
                                                     return coaches.when(
                                                       data: (seller) {
                                                         return Text(
@@ -286,9 +286,9 @@ class _SellerHomeState extends State<SellerHome> {
                                                         productProvider(
                                                             userModelList[index]
                                                                 .productId));
-                                                    ref.refresh(productProvider(
-                                                        userModelList[index]
-                                                            .productId));
+                                                    // ref.refresh(productProvider(
+                                                    //     userModelList[index]
+                                                    //         .productId));
                                                     return coaches.when(
                                                       data: (product) {
                                                         return Text(
@@ -328,11 +328,11 @@ class _SellerHomeState extends State<SellerHome> {
                                                                 userModelList[
                                                                         index]
                                                                     .productId));
-                                                        ref.refresh(
-                                                            productProvider(
-                                                                userModelList[
-                                                                        index]
-                                                                    .productId));
+                                                        // ref.refresh(
+                                                        //     productProvider(
+                                                        //         userModelList[
+                                                        //                 index]
+                                                        //             .productId));
                                                         return coaches.when(
                                                           data: (product) {
                                                             return Text(
@@ -350,8 +350,8 @@ class _SellerHomeState extends State<SellerHome> {
                                                           },
                                                           error: (error,
                                                                   stackTrace) =>
-                                                              Text(
-                                                                  'Error:'),
+                                                              const Text(
+                                                                  'Error:',),
                                                           loading: () =>
                                                               const Center(
                                                             child:
@@ -385,7 +385,7 @@ class _SellerHomeState extends State<SellerHome> {
                                                 ),
                                                 SizedBox(
                                                     height:
-                                                        size.height * 0.009),
+                                                        size.height * 0.009,),
                                               ],
                                             ),
                                           ),
@@ -408,8 +408,8 @@ class _SellerHomeState extends State<SellerHome> {
                 },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

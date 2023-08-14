@@ -202,7 +202,7 @@ class _ClothDetailsScreenState extends State<ClothDetailsScreen> {
                 left: size.width * 0.02,
                 right: size.width * 0.02,
               ),
-              child: Expanded(
+              child: SizedBox(
                 child: Container(
                   padding: EdgeInsets.only(
                     top: size.height * 0.02,

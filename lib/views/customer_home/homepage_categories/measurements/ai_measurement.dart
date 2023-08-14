@@ -1,7 +1,13 @@
-import 'package:ect/Constants/colors.dart';
-import 'package:ect/views/customer_home/homepage_categories/measurements/your_measurement.dart';
-import 'package:flutter/material.dart';
+import 'dart:typed_data';
 
+import 'package:ect/Constants/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../../widgets/image_picker.dart';
+import '../../../../widgets/snackbar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 class AIMeasurement extends StatefulWidget {
   const AIMeasurement({super.key});
 
@@ -10,6 +16,31 @@ class AIMeasurement extends StatefulWidget {
 }
 
 class _AIMeasurementState extends State<AIMeasurement> {
+  
+  File? _image;
+  bool load = false;
+  void selectImage() async {
+    try {
+      print("object");
+      setState(() {
+        load = true;
+      });
+      File im = await pickImage(ImageSource.camera);
+
+      setState(() {
+        _image = im;
+      });
+      setState(() {
+        load = false;
+      });
+    } catch (e) {
+      setState(() {
+        load = false;
+      });
+      showSnackBar(context, "error");
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -49,12 +80,13 @@ class _AIMeasurementState extends State<AIMeasurement> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const YourMeasurements(),
-                    ),
-                  );
+                  selectImage();
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const YourMeasurements(),
+                  //   ),
+                  // );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -70,7 +102,7 @@ class _AIMeasurementState extends State<AIMeasurement> {
                     Icon(
                       Icons.double_arrow,
                       color: const Color(0xffFEB448),
-                      grade: size.height*0.024,
+                      grade: size.height * 0.024,
                     ),
                   ],
                 ),
@@ -81,4 +113,21 @@ class _AIMeasurementState extends State<AIMeasurement> {
       ),
     );
   }
+
+Future<void> sendImage(File _image) async {
+  var uri = Uri.parse("http://192.168.100.136:8000/predict/");
+
+  var request = http.MultipartRequest('POST', uri)
+    ..files.add(await http.MultipartFile.fromPath('file', _image.path));
+
+  var response = await request.send();
+
+  if (response.statusCode == 200) {
+    print("Image uploaded successfully!");
+//yahan response process kr skty
+  } else {
+    print("Failed to upload image!");
+  }
+}
+
 }

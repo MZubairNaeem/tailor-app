@@ -202,7 +202,7 @@ class _FabricDetailsScreenState extends State<FabricDetailsScreen> {
                 left: size.width * 0.02,
                 right: size.width * 0.02,
               ),
-              child: Expanded(
+              child: SizedBox(
                 child: Container(
                   padding: EdgeInsets.only(
                     top: size.height * 0.02,
@@ -312,7 +312,7 @@ class _FabricDetailsScreenState extends State<FabricDetailsScreen> {
                               ref.refresh(userProvider(_uid));
                               return userResult.when(
                                 data: (userModel) {
-                                  return Expanded(
+                                  return SizedBox(
                                     child: Align(
                                       alignment: Alignment.bottomRight,
                                       child: IconButton(

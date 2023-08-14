@@ -23,6 +23,7 @@ final orderInProcessSeller = FutureProvider<List<OrderModel>>((ref) async {
       orderDate: data['orderDate'],
       customerOrderStatus: data['customerOrderStatus'],
       sellerOrderStatus: data['sellerOrderStatus'],
+      paymentSS: data['paymentSS'],
     );
   }).toList();
 
