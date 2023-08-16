@@ -23,6 +23,7 @@ final orderInProcessCustomer = FutureProvider<List<OrderModel>>((ref) async {
       orderDate: data['orderDate'],
       customerOrderStatus: data['customerOrderStatus'],
       sellerOrderStatus: data['sellerOrderStatus'],
+      price: data['price'],
     );
   }).toList();
 
@@ -48,6 +49,7 @@ final orderCompleteCustomer = FutureProvider<List<OrderModel>>((ref) async {
       orderDate: data['orderDate'],
       customerOrderStatus: data['customerOrderStatus'],
       sellerOrderStatus: data['sellerOrderStatus'],
+      price: data['price'],
     );
   }).toList();
 
@@ -73,6 +75,7 @@ final orderCancelledCustomer = FutureProvider<List<OrderModel>>((ref) async {
       orderDate: data['orderDate'],
       customerOrderStatus: data['customerOrderStatus'],
       sellerOrderStatus: data['sellerOrderStatus'],
+      price: data['price'],
     );
   }).toList();
 
@@ -97,6 +100,7 @@ final allCustorder = FutureProvider<List<OrderModel>>((ref) async {
       orderDate: data['orderDate'],
       customerOrderStatus: data['customerOrderStatus'],
       sellerOrderStatus: data['sellerOrderStatus'],
+      price: data['price'],
     );
   }).toList();
 

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ect/view_models/providers/cart_provider.dart';
+import 'package:ect/views/customer_home/nav_home/customer_cart/place_order.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -505,7 +506,27 @@ class _CustomerCartState extends State<CustomerCart> {
                                                                                 (userModel) {
                                                                               return ElevatedButton(
                                                                                 onPressed: () {
-                                                                                  _showRatingDialog(context, userModelList[index].productName!, userModelList[index].productPrice!.toString(), userModelList[index].tailorId!, userModelList[index].productId!, userModel.tailorNumber!);
+                                                                                  Navigator.push(
+                                                                                      context,
+                                                                                      MaterialPageRoute(
+                                                                                          builder: (context) => PlaceOrder(
+                                                                                                productId: userModelList[index].productId!,
+                                                                                                tailorId: userModelList[index].tailorId!,
+                                                                                                productName: userModelList[index].productName!,
+                                                                                                productPrice: userModelList[index].productPrice!.toString(),
+                                                                                                number: userModel.tailorNumber!,
+                                                                                                userId: userId!,
+                                                                                                seller: userModel.shopName!,
+                                                                                                image: userModelList[index].productImage!,
+                                                                                              )));
+                                                                                  // _showRatingDialog(
+                                                                                  //   context,
+                                                                                  //   userModelList[index].productName!,
+                                                                                  //   userModelList[index].productPrice!.toString(),
+                                                                                  //   userModelList[index].tailorId!,
+                                                                                  //   userModelList[index].productId!,
+                                                                                  //   userModel.tailorNumber!,
+                                                                                  // );
                                                                                 },
                                                                                 style: ElevatedButton.styleFrom(backgroundColor: customPurple),
                                                                                 child: const Text(
@@ -650,7 +671,10 @@ class _CustomerCartState extends State<CustomerCart> {
       String price, String tailorID, String productId, String number) async {
     bool cod = false;
     bool online = false;
+    int selectedQuantity = 1;
+    int totalPrice = int.parse(price);
     final size = MediaQuery.of(context).size;
+    List<int> qtyList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -744,9 +768,25 @@ class _CustomerCartState extends State<CustomerCart> {
                             ),
                           ],
                         ),
+                        DropdownButton<int>(
+                          value: selectedQuantity,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedQuantity = value!;
+                              totalPrice = int.parse(price) *
+                                  value; // Update total price
+                            });
+                          },
+                          items: qtyList.map((e) {
+                            return DropdownMenuItem<int>(
+                              value: e,
+                              child: Text(e.toString()),
+                            );
+                          }).toList(),
+                        ),
                         SizedBox(height: size.height * 0.01),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Text('Payment Method: ',
                               style: TextStyle(
                                 color: iconColor,
@@ -768,7 +808,7 @@ class _CustomerCartState extends State<CustomerCart> {
                                         online = false;
                                       });
                                     }),
-                                Text('Cash on Delivery'),
+                                const Text('Cash on Delivery'),
                               ],
                             ),
                             Row(
@@ -784,7 +824,7 @@ class _CustomerCartState extends State<CustomerCart> {
                                         cod = false;
                                       });
                                     }),
-                                Text('Via Easypaisa'),
+                                const Text('Via Easypaisa'),
                               ],
                             ),
                           ],
@@ -882,12 +922,14 @@ class _CustomerCartState extends State<CustomerCart> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Total: ',
-                    style: TextStyle(
-                      color: iconColor,
-                      fontWeight: FontWeight.bold,
-                    )),
-                total == 0.0 ? Text(price) : Text(total.toString()),
+                const Text(
+                  'Total: ',
+                  style: TextStyle(
+                    color: iconColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(totalPrice.toString())
               ],
             ),
           ],

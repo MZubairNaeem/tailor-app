@@ -51,281 +51,272 @@ class _InProcessState extends State<SellerComplete> {
                                 fontWeight: FontWeight.w800,
                               ),
                             ))
-                          :  ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: userModelList.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              top: size.height * 0.01,
-                            ),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(10.0)),
-                                color: cardColor,
-                                child: Padding(
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: userModelList.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
                                   padding: EdgeInsets.only(
-                                    left: size.width * 0.02,
-                                    top: size.width * 0.02,
+                                    top: size.height * 0.01,
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Consumer(
-                                        builder: (context, ref, _) {
-                                          // Getting coaches List
-                                          final coaches = ref.watch(
-                                              productProvider(
-                                                  userModelList[index]
-                                                      .productId));
-                                          ref.refresh(productProvider(
-                                              userModelList[index]
-                                                  .productId));
-                                          return coaches.when(
-                                            data: (product) {
-                                              return Text(
-                                                product.productName!,
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      size.height * 0.02,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              );
-                                            },
-                                            error: (error, stackTrace) =>
-                                                Text('Error: $error'),
-                                            loading: () => const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0)),
+                                      color: cardColor,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          left: size.width * 0.02,
+                                          top: size.width * 0.02,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Consumer(
+                                              builder: (context, ref, _) {
+                                                // Getting coaches List
+                                                final coaches = ref.watch(
+                                                    productProvider(
+                                                        userModelList[index]
+                                                            .productId));
+                                                ref.refresh(productProvider(
+                                                    userModelList[index]
+                                                        .productId));
+                                                return coaches.when(
+                                                  data: (product) {
+                                                    return Text(
+                                                      product.productName!,
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            size.height * 0.02,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    );
+                                                  },
+                                                  error: (error, stackTrace) =>
+                                                      Text('Error: $error'),
+                                                  loading: () => const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                );
+                                              },
                                             ),
-                                          );
-                                        },
-                                      ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Consumer(
-                                            builder: (context, ref, _) {
-                                              // Getting coaches List
-                                              final coaches = ref.watch(
-                                                  productProvider(
-                                                      userModelList[index]
-                                                          .productId));
-                                              ref.refresh(productProvider(
-                                                  userModelList[index]
-                                                      .productId));
-                                              return coaches.when(
-                                                data: (product) {
-                                                  return Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 10.0,
-                                                            right: 10.0),
-                                                    child: Image.network(
-                                                      product.productImage!,
-                                                      width:
-                                                          size.width * 0.25,
-                                                      height:
-                                                          size.height * 0.125,
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                  );
-                                                },
-                                                error: (error, stackTrace) =>
-                                                    Text('Error: $error'),
-                                                loading: () => const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          SizedBox(
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: size.height * 0.02,
-                                                  right: size.width * 0.02),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Consumer(
-                                                    builder:
-                                                        (context, ref, _) {
-                                                      // Getting coaches List
-                                                      final coaches = ref.watch(
-                                                          tailorProvider(
-                                                              userModelList[
-                                                                      index]
-                                                                  .sellerId));
-                                                      ref.refresh(
-                                                          tailorProvider(
-                                                              userModelList[
-                                                                      index]
-                                                                  .sellerId));
-                                                      return coaches.when(
-                                                        data: (seller) {
-                                                          return Text(
-                                                            seller
-                                                                .sellerName!,
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  size.height *
-                                                                      0.018,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800,
-                                                            ),
-                                                          );
-                                                        },
-                                                        error: (error,
-                                                                stackTrace) =>
-                                                            Text(
-                                                                'Error: $error'),
-                                                        loading: () =>
-                                                            const Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        size.height * 0.01,
-                                                  ),
-                                                  Consumer(
-                                                    builder:
-                                                        (context, ref, _) {
-                                                      // Getting coaches List
-                                                      final coaches = ref.watch(
-                                                          productProvider(
-                                                              userModelList[
-                                                                      index]
-                                                                  .productId));
-                                                      ref.refresh(
-                                                          productProvider(
-                                                              userModelList[
-                                                                      index]
-                                                                  .productId));
-                                                      return coaches.when(
-                                                        data: (product) {
-                                                          return Text(
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Consumer(
+                                                  builder: (context, ref, _) {
+                                                    // Getting coaches List
+                                                    final coaches = ref.watch(
+                                                        productProvider(
+                                                            userModelList[index]
+                                                                .productId));
+                                                    ref.refresh(productProvider(
+                                                        userModelList[index]
+                                                            .productId));
+                                                    return coaches.when(
+                                                      data: (product) {
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10.0,
+                                                                  right: 10.0),
+                                                          child: Image.network(
                                                             product
-                                                                .description!,
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  size.height *
-                                                                      0.018,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
-                                                          );
-                                                        },
-                                                        error: (error,
-                                                                stackTrace) =>
-                                                            Text(
-                                                                'Error: $error'),
-                                                        loading: () =>
-                                                            const Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        size.height * 0.02,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Consumer(
-                                                        builder: (context,
-                                                            ref, _) {
-                                                          // Getting coaches List
-                                                          final coaches = ref.watch(
-                                                              productProvider(
-                                                                  userModelList[
-                                                                          index]
-                                                                      .productId));
-                                                          ref.refresh(productProvider(
-                                                              userModelList[
-                                                                      index]
-                                                                  .productId));
-                                                          return coaches.when(
-                                                            data: (product) {
-                                                              return Text(
-                                                                '${product.productPrice!} Rs.',
-                                                                style: TextStyle(
+                                                                .productImage!,
+                                                            width: size.width *
+                                                                0.25,
+                                                            height:
+                                                                size.height *
+                                                                    0.125,
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        );
+                                                      },
+                                                      error: (error,
+                                                              stackTrace) =>
+                                                          Text('Error: $error'),
+                                                      loading: () =>
+                                                          const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                SizedBox(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: size.height * 0.02,
+                                                        right:
+                                                            size.width * 0.02),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Consumer(
+                                                          builder: (context,
+                                                              ref, _) {
+                                                            // Getting coaches List
+                                                            final coaches = ref.watch(
+                                                                tailorProvider(
+                                                                    userModelList[
+                                                                            index]
+                                                                        .sellerId));
+                                                            ref.refresh(tailorProvider(
+                                                                userModelList[
+                                                                        index]
+                                                                    .sellerId));
+                                                            return coaches.when(
+                                                              data: (seller) {
+                                                                return Text(
+                                                                  seller
+                                                                      .sellerName!,
+                                                                  style:
+                                                                      TextStyle(
                                                                     fontSize:
                                                                         size.height *
-                                                                            0.02,
+                                                                            0.018,
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .w700,
-                                                                    color:
-                                                                        darkPink),
-                                                              );
-                                                            },
-                                                            error: (error,
-                                                                    stackTrace) =>
-                                                                Text(
-                                                                    'Error: $error'),
-                                                            loading: () =>
-                                                                const Center(
-                                                              child:
-                                                                  CircularProgressIndicator(),
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                      SizedBox(
-                                                        width:
-                                                            size.width * 0.02,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        size.height * 0.009,
-                                                  ),
-                                                  Text(
-                                                    userModelList[index]
-                                                        .customerOrderStatus!,
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          size.height * 0.02,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: darkPink,
+                                                                            .w800,
+                                                                  ),
+                                                                );
+                                                              },
+                                                              error: (error,
+                                                                      stackTrace) =>
+                                                                  Text(
+                                                                      'Error: $error'),
+                                                              loading: () =>
+                                                                  const Center(
+                                                                child:
+                                                                    CircularProgressIndicator(),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                        SizedBox(
+                                                          height: size.height *
+                                                              0.01,
+                                                        ),
+                                                        Consumer(
+                                                          builder: (context,
+                                                              ref, _) {
+                                                            // Getting coaches List
+                                                            final coaches = ref.watch(
+                                                                productProvider(
+                                                                    userModelList[
+                                                                            index]
+                                                                        .productId));
+                                                            ref.refresh(productProvider(
+                                                                userModelList[
+                                                                        index]
+                                                                    .productId));
+                                                            return coaches.when(
+                                                              data: (product) {
+                                                                return Text(
+                                                                  product
+                                                                      .description!,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        size.height *
+                                                                            0.018,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                );
+                                                              },
+                                                              error: (error,
+                                                                      stackTrace) =>
+                                                                  Text(
+                                                                      'Error: $error'),
+                                                              loading: () =>
+                                                                  const Center(
+                                                                child:
+                                                                    CircularProgressIndicator(),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                        SizedBox(
+                                                          height: size.height *
+                                                              0.02,
+                                                        ),
+                                                        Text(
+                                                          'Rs. ${userModelList[index].price.toString()}',
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  size.height *
+                                                                      0.02,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color: darkPink),
+                                                        ),
+                                                        SizedBox(
+                                                          width:
+                                                              size.width * 0.02,
+                                                        ),
+                                                        Text(
+                                                          'Qty ${userModelList[index].qty.toString()}',
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  size.height *
+                                                                      0.02,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color: darkPink),
+                                                        ),
+                                                        SizedBox(
+                                                          width:
+                                                              size.width * 0.02,
+                                                        ),
+                                                        SizedBox(
+                                                          height: size.height *
+                                                              0.009,
+                                                        ),
+                                                        Text(
+                                                          userModelList[index]
+                                                              .customerOrderStatus!,
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                size.height *
+                                                                    0.02,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: darkPink,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: size.height *
+                                                              0.009,
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    height:
-                                                        size.height * 0.009,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
+                                );
+                              },
+                            );
                     },
                     error: (error, stackTrace) => Text('Error: $error'),
                     loading: () => const Center(

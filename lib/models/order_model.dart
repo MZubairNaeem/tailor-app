@@ -10,6 +10,7 @@ class OrderModel {
   String? customerOrderStatus;
   String? sellerOrderStatus;
   String? paymentSS;
+  int? price;
 
   OrderModel({
     this.orderId,
@@ -20,7 +21,8 @@ class OrderModel {
     this.orderDate,
     this.customerOrderStatus,
     this.sellerOrderStatus,
-    this.paymentSS
+    this.paymentSS,
+    this.price,
   });
   OrderModel.fromMap(Map<String, dynamic> map) {
     orderId = map['orderId'];
@@ -32,6 +34,7 @@ class OrderModel {
     customerOrderStatus = map['customerOrderStatus'];
     sellerOrderStatus = map['sellerOrderStatus'];
     paymentSS = map['paymentSS'];
+    price = map['price'];
   }
   Map<String, dynamic> toMap() {
     return {
@@ -43,7 +46,9 @@ class OrderModel {
       'orderDate': orderDate,
       'customerOrderStatus': customerOrderStatus,
       'sellerOrderStatus': sellerOrderStatus,
-      'paymentSS':paymentSS
+      'paymentSS': paymentSS,
+      'price': price,
+
     };
   }
 }

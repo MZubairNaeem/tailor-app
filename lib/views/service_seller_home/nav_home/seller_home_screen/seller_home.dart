@@ -139,11 +139,11 @@ class _SellerHomeState extends State<SellerHome> {
                 builder: (context, ref, _) {
                   // Getting coaches List
                   final coaches = ref.watch(orderInProcessSeller);
-                  // ref.refresh(orderInProcessSeller);
+                  ref.refresh(orderInProcessSeller);
                   return coaches.when(
-                    data: (userModelList) {
-                      print(userModelList.length);
-                      return userModelList.isEmpty
+                    data: (orderModel) {
+                      print(orderModel.length);
+                      return orderModel.isEmpty
                           ? const Center(
                               child: Text(
                               'No Order found',
@@ -155,7 +155,7 @@ class _SellerHomeState extends State<SellerHome> {
                           : ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: userModelList.length,
+                              itemCount: orderModel.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: EdgeInsets.only(
@@ -182,7 +182,7 @@ class _SellerHomeState extends State<SellerHome> {
                                               builder: (context, ref, _) {
                                                 final coaches = ref.watch(
                                                     productProvider(
-                                                        userModelList[index]
+                                                        orderModel[index]
                                                             .productId));
                                                 // ref.refresh(productProvider(
                                                 //     userModelList[index].productId));
@@ -217,7 +217,7 @@ class _SellerHomeState extends State<SellerHome> {
                                                   builder: (context, ref, _) {
                                                     final coaches = ref.watch(
                                                         productProvider(
-                                                            userModelList[index]
+                                                            orderModel[index]
                                                                 .productId));
                                                     // ref.refresh(productProvider(
                                                     //     userModelList[index]
@@ -264,7 +264,7 @@ class _SellerHomeState extends State<SellerHome> {
                                                             (context, ref, _) {
                                                           final coaches = ref.watch(
                                                               tailorProvider(
-                                                                  userModelList[
+                                                                  orderModel[
                                                                           index]
                                                                       .sellerId));
                                                           // ref.refresh(tailorProvider(
@@ -306,7 +306,7 @@ class _SellerHomeState extends State<SellerHome> {
                                                             (context, ref, _) {
                                                           final coaches = ref.watch(
                                                               productProvider(
-                                                                  userModelList[
+                                                                  orderModel[
                                                                           index]
                                                                       .productId));
                                                           // ref.refresh(productProvider(
@@ -343,81 +343,45 @@ class _SellerHomeState extends State<SellerHome> {
                                                       SizedBox(
                                                           height: size.height *
                                                               0.02),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Consumer(
-                                                            builder: (context,
-                                                                ref, _) {
-                                                              final coaches = ref.watch(
-                                                                  productProvider(
-                                                                      userModelList[
-                                                                              index]
-                                                                          .productId));
-                                                              // ref.refresh(
-                                                              //     productProvider(
-                                                              //         userModelList[
-                                                              //                 index]
-                                                              //             .productId));
-                                                              return coaches
-                                                                  .when(
-                                                                data:
-                                                                    (product) {
-                                                                  return Text(
-                                                                    '${product.productPrice!} Rs.',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          size.height *
-                                                                              0.02,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      color:
-                                                                          darkPink,
-                                                                    ),
-                                                                  );
-                                                                },
-                                                                error: (error,
-                                                                        stackTrace) =>
-                                                                    const Text(
-                                                                  'Error:',
-                                                                ),
-                                                                loading: () =>
-                                                                    const Center(
-                                                                  child:
-                                                                      CircularProgressIndicator(),
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                          SizedBox(
-                                                              width:
-                                                                  size.width *
-                                                                      0.02),
-                                                        ],
+                                                      Text(
+                                                        'Quantity: ${orderModel[index].qty.toString()}',
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              size.height *
+                                                                  0.02,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color: darkPink,
+                                                        ),
                                                       ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            userModelList[index]
-                                                                .customerOrderStatus!,
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  size.height *
-                                                                      0.02,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: darkPink,
-                                                            ),
-                                                          ),
-                                                        ],
+                                                      SizedBox(
+                                                          width: size.height *
+                                                              0.02),
+                                                      Text(
+                                                        'Rs. ${orderModel[index].price.toString()}',
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              size.height *
+                                                                  0.02,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color: darkPink,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                          width: size.height *
+                                                              0.02),
+                                                      Text(
+                                                        orderModel[index]
+                                                            .customerOrderStatus!,
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              size.height *
+                                                                  0.02,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color: darkPink,
+                                                        ),
                                                       ),
                                                       SizedBox(
                                                         height:

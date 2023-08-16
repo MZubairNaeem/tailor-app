@@ -236,53 +236,36 @@ class _AllTabScreenState extends State<AllTabScreen> {
                                                     height:
                                                         size.height * 0.02,
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      Consumer(
-                                                        builder: (context,
-                                                            ref, _) {
-                                                          // Getting coaches List
-                                                          final coaches = ref.watch(
-                                                              productProvider(
-                                                                  userModelList[
-                                                                          index]
-                                                                      .productId));
-                                                          ref.refresh(productProvider(
-                                                              userModelList[
-                                                                      index]
-                                                                  .productId));
-                                                          return coaches.when(
-                                                            data: (product) {
-                                                              return Text(
-                                                                '${product.productPrice!} Rs.',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        size.height *
-                                                                            0.02,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                    color:
-                                                                        darkPink),
-                                                              );
-                                                            },
-                                                            error: (error,
-                                                                    stackTrace) =>
-                                                                Text(
-                                                                    'Error: $error'),
-                                                            loading: () =>
-                                                                const Center(
-                                                              child:
-                                                                  CircularProgressIndicator(),
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                      SizedBox(
-                                                        width:
-                                                            size.width * 0.02,
-                                                      ),
-                                                    ],
+
+                                                  Text(
+                                                    'Rs. ${userModelList[index].price.toString()}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                        size.height *
+                                                            0.02,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w700,
+                                                        color: darkPink),
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                    size.width * 0.02,
+                                                  ),
+                                                  Text(
+                                                    'Qty ${userModelList[index].qty.toString()}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                        size.height *
+                                                            0.02,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w700,
+                                                        color: darkPink),
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                        size.width * 0.02,
                                                   ),
                                                   SizedBox(
                                                     height:

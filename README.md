@@ -1,16 +1,7 @@
 # ect
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[22:59, 15/08/2023] Hifza Kanwal: 1. Multiple order ka
+[23:00, 15/08/2023] Hifza Kanwal: 2. Committee ny b rating ka kaha, k after order
+[23:00, 15/08/2023] ZubairNaeem: After order tailor ko phr rank nhi kia ja skta
+[23:00, 15/08/2023] ZubairNaeem: Ku k oska order hm nhi place kr rhy
+[23:01, 15/08/2023] Hifza Kanwal: 3. Or commitee ny, b yahi kaha k, just order place time login ka ay, baqi details tu show hon

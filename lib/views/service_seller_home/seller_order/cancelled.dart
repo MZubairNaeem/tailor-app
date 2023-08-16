@@ -41,8 +41,8 @@ class _InProcessState extends State<SellerCancel> {
                   final coaches = ref.watch(orderCancelledSeller);
                   ref.refresh(orderCancelledSeller);
                   return coaches.when(
-                    data: (userModelList) {
-                      return userModelList.isEmpty
+                    data: (orderModel) {
+                      return orderModel.isEmpty
                           ? const Center(
                               child: Text(
                               'No Orders Cancelled',
@@ -54,7 +54,7 @@ class _InProcessState extends State<SellerCancel> {
                           :  ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: userModelList.length,
+                        itemCount: orderModel.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: EdgeInsets.only(
@@ -81,10 +81,10 @@ class _InProcessState extends State<SellerCancel> {
                                           // Getting coaches List
                                           final coaches = ref.watch(
                                               productProvider(
-                                                  userModelList[index]
+                                                  orderModel[index]
                                                       .productId));
                                           ref.refresh(productProvider(
-                                              userModelList[index]
+                                              orderModel[index]
                                                   .productId));
                                           return coaches.when(
                                             data: (product) {
@@ -115,10 +115,10 @@ class _InProcessState extends State<SellerCancel> {
                                               // Getting coaches List
                                               final coaches = ref.watch(
                                                   productProvider(
-                                                      userModelList[index]
+                                                      orderModel[index]
                                                           .productId));
                                               ref.refresh(productProvider(
-                                                  userModelList[index]
+                                                  orderModel[index]
                                                       .productId));
                                               return coaches.when(
                                                 data: (product) {
@@ -161,12 +161,12 @@ class _InProcessState extends State<SellerCancel> {
                                                       // Getting coaches List
                                                       final coaches = ref.watch(
                                                           tailorProvider(
-                                                              userModelList[
+                                                              orderModel[
                                                                       index]
                                                                   .sellerId));
                                                       ref.refresh(
                                                           tailorProvider(
-                                                              userModelList[
+                                                              orderModel[
                                                                       index]
                                                                   .sellerId));
                                                       return coaches.when(
@@ -206,12 +206,12 @@ class _InProcessState extends State<SellerCancel> {
                                                       // Getting coaches List
                                                       final coaches = ref.watch(
                                                           productProvider(
-                                                              userModelList[
+                                                              orderModel[
                                                                       index]
                                                                   .productId));
                                                       ref.refresh(
                                                           productProvider(
-                                                              userModelList[
+                                                              orderModel[
                                                                       index]
                                                                   .productId));
                                                       return coaches.when(
@@ -245,60 +245,42 @@ class _InProcessState extends State<SellerCancel> {
                                                     height:
                                                         size.height * 0.02,
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      Consumer(
-                                                        builder: (context,
-                                                            ref, _) {
-                                                          // Getting coaches List
-                                                          final coaches = ref.watch(
-                                                              productProvider(
-                                                                  userModelList[
-                                                                          index]
-                                                                      .productId));
-                                                          ref.refresh(productProvider(
-                                                              userModelList[
-                                                                      index]
-                                                                  .productId));
-                                                          return coaches.when(
-                                                            data: (product) {
-                                                              return Text(
-                                                                '${product.productPrice!} Rs.',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        size.height *
-                                                                            0.02,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                    color:
-                                                                        darkPink),
-                                                              );
-                                                            },
-                                                            error: (error,
-                                                                    stackTrace) =>
-                                                                Text(
-                                                                    'Error: $error'),
-                                                            loading: () =>
-                                                                const Center(
-                                                              child:
-                                                                  CircularProgressIndicator(),
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                      SizedBox(
-                                                        width:
-                                                            size.width * 0.02,
-                                                      ),
-                                                    ],
+                                                  Text(
+                                                    'Rs. ${orderModel[index].price.toString()}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                        size.height *
+                                                            0.02,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w700,
+                                                        color: darkPink),
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                    size.width * 0.02,
+                                                  ),
+                                                  Text(
+                                                    'Qty ${orderModel[index].qty.toString()}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                        size.height *
+                                                            0.02,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w700,
+                                                        color: darkPink),
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                        size.width * 0.02,
                                                   ),
                                                   SizedBox(
                                                     height:
                                                         size.height * 0.009,
                                                   ),
                                                   Text(
-                                                    userModelList[index]
+                                                    orderModel[index]
                                                         .customerOrderStatus!,
                                                     style: TextStyle(
                                                       fontSize:
