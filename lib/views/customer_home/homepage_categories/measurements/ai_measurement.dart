@@ -2,8 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-
 import '../../../../Constants/colors.dart';
+
+import 'dart:convert';
 
 class AIMeasurement extends StatefulWidget {
   @override
@@ -15,12 +16,25 @@ class _AIMeasurementPageState extends State<AIMeasurement> {
   String _responseText = '';
 
   Future<void> getImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
+        _responseText =
+            "Image Captured. Now click Measure Now to send Image to the model for prediction.";
+      }
+    });
+  }
+
+  Future<void> getImageFromGallery() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        _responseText =
+            "Image selected from gallery. Click Measure Now to send Image to the model for prediction.";
       }
     });
   }
@@ -32,18 +46,39 @@ class _AIMeasurementPageState extends State<AIMeasurement> {
       });
       return;
     }
+    setState(() {
+      _responseText =
+          'Uploading Image to Model. It will take some time(Approx 40 seconds.)';
+    });
 
-    final Uri apiUrl = Uri.parse(
-        'http://10.0.2.2:8000/predict/'); // Replace with your Flask API URL
-
-    var request = http.MultipartRequest('POST', apiUrl);
-    request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('http://192.168.1.3:5000/predict/'));
+    Map<String, String> headers = {"Content-type": "multipart/form-data"};
+    request.files.add(
+      http.MultipartFile(
+        'image',
+        _image!.readAsBytes().asStream(),
+        _image!.lengthSync(),
+        filename: _image!.path.split('/').last,
+      ),
+    );
+    request.headers.addAll(headers);
+    print("request1: " + request.toString());
 
     try {
-      final response = await request.send();
-      final responseBody = await response.stream.bytesToString();
+      var res = await request.send();
+      http.Response response = await http.Response.fromStream(res);
+
+      Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      String formattedResponse = ''; // Initialize an empty string
+
+      // Iterate through the map and format the response
+      jsonResponse.forEach((key, value) {
+        formattedResponse += '$key: $value\n';
+      });
+
       setState(() {
-        _responseText = responseBody;
+        _responseText = formattedResponse;
       });
     } catch (e) {
       setState(() {
@@ -59,34 +94,51 @@ class _AIMeasurementPageState extends State<AIMeasurement> {
         title: Text('Body Measurement'),
         backgroundColor: customPurple,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _image == null
-                ? Text('No image selected.')
-                : Image.file(
-                    _image!,
-              height: 200,
-              width: 100,
-                  ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: getImage,
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(customPurple),
-                foregroundColor:  MaterialStateProperty.all<Color>(customWhite),
+      body: SingleChildScrollView(
+        // Wrap the Column with SingleChildScrollView
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              _image == null
+                  ? Text('No image selected.')
+                  : Image.file(
+                      _image!,
+                      height: 250,
+                      width: 500,
+                    ),
+              SizedBox(height: 70),
+              ElevatedButton(
+                onPressed: getImage,
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(customPurple),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(customWhite),
+                ),
+                child: Text('Open Camera to Capture'),
               ),
-              child: Text('Open Camera to Capture'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: callApiWithImage,
-              child: const Text('Measure now'),
-            ),
-            SizedBox(height: 20),
-            Text(_responseText),
-          ],
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed:
+                    getImageFromGallery, // Use the new method for gallery
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(customPurple),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(customWhite),
+                ),
+                child: Text('Choose from Gallery'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: callApiWithImage,
+                child: const Text('Measure now'),
+              ),
+              SizedBox(height: 20),
+              Text(_responseText),
+            ],
+          ),
         ),
       ),
     );
