@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import '../../../../Constants/colors.dart';
 
-import 'dart:convert';
+import '../../../../Constants/colors.dart';
 
 class AIMeasurement extends StatefulWidget {
   @override
@@ -95,11 +96,11 @@ class _AIMeasurementPageState extends State<AIMeasurement> {
         backgroundColor: customPurple,
       ),
       body: SingleChildScrollView(
-        // Wrap the Column with SingleChildScrollView
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              SizedBox(height: 20),
               _image == null
                   ? Text('No image selected.')
                   : Image.file(
@@ -118,7 +119,7 @@ class _AIMeasurementPageState extends State<AIMeasurement> {
                 ),
                 child: Text('Open Camera to Capture'),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               ElevatedButton(
                 onPressed:
                     getImageFromGallery, // Use the new method for gallery
@@ -132,11 +133,24 @@ class _AIMeasurementPageState extends State<AIMeasurement> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(customOrange),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(customWhite),
+                ),
                 onPressed: callApiWithImage,
                 child: const Text('Measure now'),
               ),
               SizedBox(height: 20),
-              Text(_responseText),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                    child: Text(
+                  _responseText,
+                  textAlign: TextAlign.center,
+                )),
+              ),
             ],
           ),
         ),

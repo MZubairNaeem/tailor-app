@@ -1,5 +1,5 @@
 import 'package:ect/Constants/colors.dart';
-import 'package:ect/views/customer_home/homepage_categories/measurements/ai_measurement.dart';
+import 'package:ect/views/customer_home/homepage_categories/measurements/how_to_capture.dart';
 import 'package:ect/views/customer_home/homepage_categories/measurements/manual_measuremnets.dart';
 import 'package:flutter/material.dart';
 
@@ -145,7 +145,7 @@ class _MeasurementScreenState extends State<MeasurementScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>  AIMeasurement(),
+                        builder: (context) => HowToMeasure(),
                       ),
                     );
                   },
