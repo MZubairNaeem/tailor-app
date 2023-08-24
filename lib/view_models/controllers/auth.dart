@@ -3,6 +3,7 @@ import 'package:ect/views/auth/welcome.dart';
 import 'package:ect/widgets/snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/user.dart';
 import '../../views/auth/login.dart';
@@ -47,6 +48,9 @@ class Auth {
 
   Future<void> logout(BuildContext context) async {
     try {
+      //clear my all providers and states
+      final container = ProviderContainer();
+      container.dispose();
       await FirebaseAuth.instance.signOut().then((value) {
         Navigator.pushReplacement(
           context,

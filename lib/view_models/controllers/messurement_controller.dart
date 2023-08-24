@@ -6,10 +6,18 @@ import 'package:flutter/cupertino.dart';
 
 class Measurement{
     Future<MeasurementModel> store({
-    required String sleeve,
-    required String arm,
+    required String height,
+    required String waist,
+    required String belly,
     required String chest,
-    required String shoulder,
+    required String wrist,
+    required String neck,
+    required String armLength,
+    required String thigh,
+    required String shoulderWidth,
+    required String hips,
+    required String ankle,
+
 
   }) async {
     try {
@@ -18,10 +26,17 @@ class Measurement{
       String uid = _auth.currentUser!.uid;
         MeasurementModel measurementModel = MeasurementModel(
           uid: uid,
-          sleeve: sleeve,
-          arm: arm,
+          height: height,
+          waist: waist,
+          belly: belly,
           chest: chest,
-          shoulder: shoulder,
+          wrist: wrist,
+          neck: neck,
+          armLength: armLength,
+          thigh: thigh,
+          shoulderWidth: shoulderWidth,
+          hips: hips,
+          ankle: ankle,
         );
         debugPrint("MeasurementModel created");
         await _firestore.collection('CustomerMeasurement').doc(uid).set(

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ect/constants/colors.dart';
+import 'package:ect/view_models/providers/measurement_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../main.dart';
 import '../../../models/chat_room_model.dart';
@@ -63,6 +65,141 @@ class _ClientSideChatState extends State<ClientSideChat> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: customPurple,
+          actions: [
+            widget.targetUser.userType == 'customer' &&
+                    widget.user.userType == 'seller'
+                ? Consumer(
+                    builder: (context, ref, _) {
+                      // Getting coaches List
+                      final userMeasurement =
+                          ref.watch(measurement(widget.targetUser.uid));
+                      ref.watch(measurement(widget.targetUser.uid));
+                      return userMeasurement.when(
+                        data: (userData) {
+                          if (userData.uid != null) {
+                            return IconButton(
+                              onPressed: () {
+                                //show dialog box to get the measurement
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                            "${widget.targetUser.username} Measurements"),
+                                        content: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                "Height: ${userData.height ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Waist: ${userData.waist ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Belly: ${userData.belly ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Chest: ${userData.chest ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Wrist: ${userData.wrist ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Neck: ${userData.neck ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Arm Length: ${userData.armLength ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Thigh: ${userData.thigh ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Shoulder Width: ${userData.shoulderWidth ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Hip: ${userData.hips ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Ankle: ${userData.ankle ?? "No Data"} cm",
+                                                style: const TextStyle(
+                                                    color: customPurple,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text(
+                                                "Close",
+                                                style: TextStyle(
+                                                  color: customPurple,
+                                                ),
+                                              )),
+                                        ],
+                                      );
+                                    });
+                              },
+                              //when pressed user mesasurement will be sent to the tailor
+                              icon: const Icon(Icons.accessibility_rounded),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                        error: (error, stackTrace) => Container(),
+                        loading: () => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    },
+                  )
+                : Container(),
+          ],
           title: Row(
             children: [
               CircleAvatar(

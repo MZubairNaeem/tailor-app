@@ -2,7 +2,7 @@ import 'package:ect/Constants/colors.dart';
 import 'package:ect/constants/button.dart';
 import 'package:flutter/material.dart';
 
-import '../customer_home/nav_home/customer_home.dart';
+import '../customer_home/nav_home/guest_home.dart';
 import 'login.dart';
 import 'who_are_you.dart';
 

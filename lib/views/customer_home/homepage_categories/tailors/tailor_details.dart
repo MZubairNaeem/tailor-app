@@ -18,11 +18,16 @@ import '../../../../widgets/snackbar.dart';
 import '../../../common/chat/chat.dart';
 
 class TailorDetails extends StatefulWidget {
+  String? userType;
   TailorProfileModel? tailorProfileModel;
   UserModel? userModel;
   User? firebaseUser;
   TailorDetails(
-      {super.key, this.tailorProfileModel, this.userModel, this.firebaseUser});
+      {super.key,
+      this.tailorProfileModel,
+      this.userModel,
+      this.firebaseUser,
+      this.userType});
 
   @override
   State<TailorDetails> createState() => _TailorDetailsState();
@@ -61,9 +66,11 @@ class _TailorDetailsState extends State<TailorDetails> {
   String? _uid;
   @override
   void initState() {
-    getUserData();
-    getfirebaseUser();
-    _uid = FirebaseAuth.instance.currentUser!.uid;
+    if (widget.userType == null) {
+      getUserData();
+      getfirebaseUser();
+      _uid = FirebaseAuth.instance.currentUser!.uid;
+    }
     super.initState();
   }
 
@@ -240,22 +247,26 @@ class _TailorDetailsState extends State<TailorDetails> {
                     data: (userModelList) {
                       return ElevatedButton(
                         onPressed: () async {
-                          ChatRoomModel? chatRoomModel =
-                              await getChatRoomModel(userModelList);
-                          if (chatRoomModel != null) {
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                            // ignore: use_build_context_synchronously
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ClientSideChat(
-                                    targetUser: userModelList,
-                                    chatRoom: chatRoomModel,
-                                    user: userModel!,
-                                    firebaseUser: firebaseUser!),
-                              ),
-                            );
+                          if (widget.userType == null) {
+                            ChatRoomModel? chatRoomModel =
+                                await getChatRoomModel(userModelList);
+                            if (chatRoomModel != null) {
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                              // ignore: use_build_context_synchronously
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ClientSideChat(
+                                      targetUser: userModelList,
+                                      chatRoom: chatRoomModel,
+                                      user: userModel!,
+                                      firebaseUser: firebaseUser!),
+                                ),
+                              );
+                            }
+                          } else if (widget.userType == 'guest') {
+                            showSnackBar(context, 'Please Login First');
                           }
                         },
                         style: const ButtonStyle(
@@ -382,7 +393,12 @@ class _TailorDetailsState extends State<TailorDetails> {
                                 alignment: Alignment.topRight,
                                 child: IconButton(
                                   onPressed: () async {
-                                    _showRatingDialog(context);
+                                    if (widget.userType == null) {
+                                      _showRatingDialog(context);
+                                    } else if (widget.userType == 'guest') {
+                                      showSnackBar(
+                                          context, 'Please Login First');
+                                    }
                                     // add rating into database
                                   },
                                   icon: Icon(
@@ -432,145 +448,153 @@ class _TailorDetailsState extends State<TailorDetails> {
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                                Consumer(
-                                  builder: (context, ref, _) {
-                                    final userResult =
-                                        ref.watch(userProvider(_uid));
-                                    ref.refresh(userProvider(_uid));
-                                    return userResult.when(
-                                      data: (userModel) {
-                                        return SizedBox(
-                                          child: Align(
-                                            alignment: Alignment.topRight,
-                                            child: IconButton(
-                                              onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      AlertDialog(
-                                                    title: const Text(
-                                                        'Add your comment'),
-                                                    content: TextField(
-                                                      controller:
-                                                          _cmtController,
-                                                      decoration:
-                                                          const InputDecoration(
-                                                              hintText:
-                                                                  'Enter something...'),
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        style: TextButton
-                                                            .styleFrom(
-                                                          foregroundColor:
-                                                              Colors.black,
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: const Text(
-                                                            'Cancel'),
-                                                      ),
-                                                      TextButton(
-                                                        style: TextButton
-                                                            .styleFrom(
-                                                          foregroundColor:
-                                                              Colors.white,
-                                                          backgroundColor:
-                                                              customPurple,
-                                                        ),
-                                                        onPressed: () async {
-                                                          String enteredText =
-                                                              _cmtController
-                                                                  .text;
+                                widget.userType == null
+                                    ? Consumer(
+                                        builder: (context, ref, _) {
+                                          final userResult =
+                                              ref.watch(userProvider(_uid));
+                                          ref.refresh(userProvider(_uid));
+                                          return userResult.when(
+                                            data: (userModel) {
+                                              return SizedBox(
+                                                child: Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            AlertDialog(
+                                                          title: const Text(
+                                                              'Add your comment'),
+                                                          content: TextField(
+                                                            controller:
+                                                                _cmtController,
+                                                            decoration:
+                                                                const InputDecoration(
+                                                                    hintText:
+                                                                        'Enter something...'),
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              style: TextButton
+                                                                  .styleFrom(
+                                                                foregroundColor:
+                                                                    Colors
+                                                                        .black,
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: const Text(
+                                                                  'Cancel'),
+                                                            ),
+                                                            TextButton(
+                                                              style: TextButton
+                                                                  .styleFrom(
+                                                                foregroundColor:
+                                                                    Colors
+                                                                        .white,
+                                                                backgroundColor:
+                                                                    customPurple,
+                                                              ),
+                                                              onPressed:
+                                                                  () async {
+                                                                String
+                                                                    enteredText =
+                                                                    _cmtController
+                                                                        .text;
 
-                                                          try {
-                                                            // Save the comment to the tailor's profile collection under the user ID and comments subcollection
-                                                            await FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'tailorProfile')
-                                                                .doc(widget
-                                                                    .tailorProfileModel!
-                                                                    .tailorId!)
-                                                                .collection(
-                                                                    'comments')
-                                                                .add({
-                                                              'comment':
-                                                                  enteredText,
-                                                              'timestamp':
-                                                                  FieldValue
-                                                                      .serverTimestamp(),
-                                                              'userId':
-                                                                  FirebaseAuth
+                                                                try {
+                                                                  // Save the comment to the tailor's profile collection under the user ID and comments subcollection
+                                                                  await FirebaseFirestore
                                                                       .instance
-                                                                      .currentUser!
-                                                                      .uid,
-                                                              'userName':
-                                                                  userModel
-                                                                      .username!,
-                                                              'userPhotoUrl':
-                                                                  userModel
-                                                                      .photoUrl!,
-                                                            });
+                                                                      .collection(
+                                                                          'tailorProfile')
+                                                                      .doc(widget
+                                                                          .tailorProfileModel!
+                                                                          .tailorId!)
+                                                                      .collection(
+                                                                          'comments')
+                                                                      .add({
+                                                                    'comment':
+                                                                        enteredText,
+                                                                    'timestamp':
+                                                                        FieldValue
+                                                                            .serverTimestamp(),
+                                                                    'userId': FirebaseAuth
+                                                                        .instance
+                                                                        .currentUser!
+                                                                        .uid,
+                                                                    'userName':
+                                                                        userModel
+                                                                            .username!,
+                                                                    'userPhotoUrl':
+                                                                        userModel
+                                                                            .photoUrl!,
+                                                                  });
 
-                                                            // Optional: Show a snackbar or toast to indicate successful saving
-                                                            // ignore: use_build_context_synchronously
-                                                            showSnackBar(
-                                                                context,
-                                                                'Comment saved successfully!');
-                                                            // Clear the text field
-                                                            _cmtController
-                                                                .clear();
-                                                            // Close the dialog box
-                                                            // ignore: use_build_context_synchronously
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          } catch (e) {
-                                                            // Handle any errors that occur during saving
-                                                            print(
-                                                                'Error saving comment: $e');
-                                                            // Optional: Show an error snackbar or toast
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                              const SnackBar(
-                                                                  content: Text(
-                                                                      'Error saving comment. Please try again.')),
-                                                            );
-                                                          }
-                                                        },
-                                                        child: const Text('OK'),
-                                                      ),
-                                                    ],
+                                                                  // Optional: Show a snackbar or toast to indicate successful saving
+                                                                  // ignore: use_build_context_synchronously
+                                                                  showSnackBar(
+                                                                      context,
+                                                                      'Comment saved successfully!');
+                                                                  // Clear the text field
+                                                                  _cmtController
+                                                                      .clear();
+                                                                  // Close the dialog box
+                                                                  // ignore: use_build_context_synchronously
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                } catch (e) {
+                                                                  // Handle any errors that occur during saving
+                                                                  print(
+                                                                      'Error saving comment: $e');
+                                                                  // Optional: Show an error snackbar or toast
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                    const SnackBar(
+                                                                        content:
+                                                                            Text('Error saving comment. Please try again.')),
+                                                                  );
+                                                                }
+                                                              },
+                                                              child: const Text(
+                                                                  'OK'),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    icon: Icon(
+                                                      Icons
+                                                          .chat_bubble_outline_outlined,
+                                                      color: darkPink,
+                                                      size: size.height * 0.035,
+                                                    ),
                                                   ),
-                                                );
-                                              },
-                                              icon: Icon(
-                                                Icons
-                                                    .chat_bubble_outline_outlined,
-                                                color: darkPink,
-                                                size: size.height * 0.035,
-                                              ),
+                                                ),
+                                              );
+                                            },
+                                            loading: () =>
+                                                const CircularProgressIndicator(
+                                              color: customPurple,
+                                              strokeWidth: 2,
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      loading: () =>
-                                          const CircularProgressIndicator(
-                                        color: customPurple,
-                                        strokeWidth: 2,
-                                      ),
-                                      error: (error, stackTrace) => const Text(
-                                        '',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                            error: (error, stackTrace) =>
+                                                const Text(
+                                              '',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : Container(),
                               ],
                             ),
                           ),
@@ -929,7 +953,7 @@ class _TailorDetailsState extends State<TailorDetails> {
 
                     double averageRating = (totalRating / ratings.docs.length);
                     int intValue = averageRating.toInt();
-                
+
                     await FirebaseFirestore.instance
                         .collection('tailorProfile')
                         .doc(widget.tailorProfileModel!.tailorId!)
