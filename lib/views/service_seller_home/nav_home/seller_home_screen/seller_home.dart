@@ -78,14 +78,14 @@ class _SellerHomeState extends State<SellerHome> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Your Recent Orders",
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: size.height * 0.03,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -93,8 +93,7 @@ class _SellerHomeState extends State<SellerHome> {
                     ),
                     Image.asset(
                       "assets/Graphics/earnings.png",
-                      width: 64,
-                      height: 64,
+                      scale: size.height * 0.0015,
                     ),
                   ],
                 ),
@@ -227,7 +226,7 @@ class _SellerHomeState extends State<SellerHome> {
                                                         return Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 10.0,
                                                                   right: 10.0),
                                                           child: Image.network(

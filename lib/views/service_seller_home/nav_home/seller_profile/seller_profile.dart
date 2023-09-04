@@ -156,7 +156,6 @@ class _SellerProfileState extends State<SellerProfile> {
               return [
                 SliverToBoxAdapter(
                   child: Container(
-                    height: size.height * 0.35,
                     width: double.infinity,
                     margin: EdgeInsets.symmetric(
                       horizontal: size.width * 0.03,
@@ -273,39 +272,76 @@ class _SellerProfileState extends State<SellerProfile> {
                             },
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddTailorScreen(
-                                    sellerName: sellerName,
-                                  ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AddTailorScreen(
+                                        sellerName: sellerName,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: customWhite,
                                 ),
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: customWhite,
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    20.0,
-                                  ),
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        20.0,
+                                      ),
+                                    ),
+                                    backgroundColor: darkPink.withOpacity(0.7)),
+                                label: Text(
+                                  "Edit ",
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.027,
+                                      fontWeight: FontWeight.w500,
+                                      color: customWhite),
                                 ),
-                                backgroundColor: darkPink.withOpacity(0.7)),
-                            label: Text(
-                              "Edit ",
-                              style: TextStyle(
-                                  fontSize: size.height * 0.027,
-                                  fontWeight: FontWeight.w500,
-                                  color: customWhite),
+                              ),
                             ),
-                          ),
-                        ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AddItemScreen(),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: customWhite,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        20.0,
+                                      ),
+                                    ),
+                                    backgroundColor: darkPink.withOpacity(0.7)),
+                                label: Text(
+                                  "Add item ",
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.027,
+                                      fontWeight: FontWeight.w500,
+                                      color: customWhite),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -340,28 +376,23 @@ class _SellerProfileState extends State<SellerProfile> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AddItemScreen(),
-              ),
-            );
-          },
-          backgroundColor: customPurple,
-          icon: const Icon(
-            Icons.add,
-            color: customWhite,
-          ),
-          label: const Text(
-            "Add Item",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
+        // floatingActionButton: FloatingActionButton.extended(
+        //   onPressed: () {
+
+        //   },
+        //   backgroundColor: customPurple,
+        //   icon: const Icon(
+        //     Icons.add,
+        //     color: customWhite,
+        //   ),
+        //   label: const Text(
+        //     "Add Item",
+        //     style: TextStyle(
+        //       fontSize: 16,
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }

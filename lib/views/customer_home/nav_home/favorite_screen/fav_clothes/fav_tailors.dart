@@ -1,6 +1,6 @@
 import 'package:ect/Constants/colors.dart';
 import 'package:ect/view_models/providers/favortite_tailors.dart';
-import 'package:ect/views/customer_home/homepage_categories/clothes/clothes_screen.dart';
+import 'package:ect/views/customer_home/homepage_categories/tailors/tailors_screen.dart';
 import 'package:ect/views/customer_home/nav_home/favorite_screen/fav_clothes/favorite_tailor_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -92,10 +92,10 @@ class _FavoriteScreenState extends State<FavTailors> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ClothesScreen()));
+                              builder: (context) => const TailorScreen()));
                     },
                     child: Text(
-                      "CONTINUE SHOPPING",
+                      "More Tailors",
                       style: TextStyle(
                         fontSize: size.height * 0.02,
                         fontWeight: FontWeight.w800,

@@ -291,46 +291,43 @@ class _TailorDetailsState extends State<TailorDetails> {
           ),
         ),
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: size.height * 0.02,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: customOrange,
-                      width: size.width * 0.015,
-                    ),
-                  ),
-                  child: Image.network(
-                    widget.tailorProfileModel!.tailorImage!,
-                    width: size.width * 1,
-                    fit: BoxFit.contain,
-                  ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: customOrange,
+                  width: size.width * 0.015,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: size.width * 0.02,
-                    right: size.width * 0.02,
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      top: size.height * 0.02,
-                      left: size.width * 0.02,
-                      right: size.width * 0.02,
-                      bottom: size.height * 0.01,
-                    ),
-                    height: size.height * 0.15,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: cardColor,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Column(
+              ),
+              child: Image.network(
+                widget.tailorProfileModel!.tailorImage!,
+                width: size.width * 1,
+                fit: BoxFit.contain,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: size.width * 0.02,
+                right: size.width * 0.02,
+              ),
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: size.height * 0.02,
+                  left: size.width * 0.02,
+                  right: size.width * 0.02,
+                  bottom: size.height * 0.01,
+                ),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: cardColor,
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
@@ -388,6 +385,10 @@ class _TailorDetailsState extends State<TailorDetails> {
                                 ),
                               ],
                             ),
+                          ],
+                        ),
+                        Row(
+                          children: [
                             SizedBox(
                               child: Align(
                                 alignment: Alignment.topRight,
@@ -419,493 +420,475 @@ class _TailorDetailsState extends State<TailorDetails> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          child: Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Row(
-                              children: [
-                                Transform(
-                                  alignment: Alignment.center,
-                                  transform: Matrix4.rotationY(math.pi)
-                                    ..rotateZ(-math.pi / 3),
-                                  child: Transform(
-                                    alignment: Alignment.center,
-                                    transform: Matrix4.rotationX(math.pi),
-                                    child: Icon(
-                                      Icons.history,
-                                      size: size.height * 0.035,
-                                      color: darkPink,
-                                    ),
-                                  ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.rotationY(math.pi)
+                                ..rotateZ(-math.pi / 3),
+                              child: Transform(
+                                alignment: Alignment.center,
+                                transform: Matrix4.rotationX(math.pi),
+                                child: Icon(
+                                  Icons.history,
+                                  size: size.height * 0.035,
+                                  color: darkPink,
                                 ),
-                                SizedBox(
-                                  width: size.width * 0.01,
-                                ),
-                                Text(
-                                  "2 days",
-                                  style: TextStyle(
-                                    fontSize: size.height * 0.02,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                widget.userType == null
-                                    ? Consumer(
-                                        builder: (context, ref, _) {
-                                          final userResult =
-                                              ref.watch(userProvider(_uid));
-                                          ref.refresh(userProvider(_uid));
-                                          return userResult.when(
-                                            data: (userModel) {
-                                              return SizedBox(
-                                                child: Align(
-                                                  alignment: Alignment.topRight,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (context) =>
-                                                            AlertDialog(
-                                                          title: const Text(
-                                                              'Add your comment'),
-                                                          content: TextField(
-                                                            controller:
-                                                                _cmtController,
-                                                            decoration:
-                                                                const InputDecoration(
-                                                                    hintText:
-                                                                        'Enter something...'),
-                                                          ),
-                                                          actions: [
-                                                            TextButton(
-                                                              style: TextButton
-                                                                  .styleFrom(
-                                                                foregroundColor:
-                                                                    Colors
-                                                                        .black,
-                                                              ),
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              child: const Text(
-                                                                  'Cancel'),
-                                                            ),
-                                                            TextButton(
-                                                              style: TextButton
-                                                                  .styleFrom(
-                                                                foregroundColor:
-                                                                    Colors
-                                                                        .white,
-                                                                backgroundColor:
-                                                                    customPurple,
-                                                              ),
-                                                              onPressed:
-                                                                  () async {
-                                                                String
-                                                                    enteredText =
-                                                                    _cmtController
-                                                                        .text;
-
-                                                                try {
-                                                                  // Save the comment to the tailor's profile collection under the user ID and comments subcollection
-                                                                  await FirebaseFirestore
-                                                                      .instance
-                                                                      .collection(
-                                                                          'tailorProfile')
-                                                                      .doc(widget
-                                                                          .tailorProfileModel!
-                                                                          .tailorId!)
-                                                                      .collection(
-                                                                          'comments')
-                                                                      .add({
-                                                                    'comment':
-                                                                        enteredText,
-                                                                    'timestamp':
-                                                                        FieldValue
-                                                                            .serverTimestamp(),
-                                                                    'userId': FirebaseAuth
-                                                                        .instance
-                                                                        .currentUser!
-                                                                        .uid,
-                                                                    'userName':
-                                                                        userModel
-                                                                            .username!,
-                                                                    'userPhotoUrl':
-                                                                        userModel
-                                                                            .photoUrl!,
-                                                                  });
-
-                                                                  // Optional: Show a snackbar or toast to indicate successful saving
-                                                                  // ignore: use_build_context_synchronously
-                                                                  showSnackBar(
-                                                                      context,
-                                                                      'Comment saved successfully!');
-                                                                  // Clear the text field
-                                                                  _cmtController
-                                                                      .clear();
-                                                                  // Close the dialog box
-                                                                  // ignore: use_build_context_synchronously
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                } catch (e) {
-                                                                  // Handle any errors that occur during saving
-                                                                  print(
-                                                                      'Error saving comment: $e');
-                                                                  // Optional: Show an error snackbar or toast
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(
-                                                                    const SnackBar(
-                                                                        content:
-                                                                            Text('Error saving comment. Please try again.')),
-                                                                  );
-                                                                }
-                                                              },
-                                                              child: const Text(
-                                                                  'OK'),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    },
-                                                    icon: Icon(
-                                                      Icons
-                                                          .chat_bubble_outline_outlined,
-                                                      color: darkPink,
-                                                      size: size.height * 0.035,
-                                                    ),
+                              ),
+                            ),
+                            Text(
+                              "2 days",
+                              style: TextStyle(
+                                fontSize: size.height * 0.02,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                        widget.userType == null
+                            ? Consumer(
+                                builder: (context, ref, _) {
+                                  final userResult =
+                                      ref.watch(userProvider(_uid));
+                                  ref.refresh(userProvider(_uid));
+                                  return userResult.when(
+                                    data: (userModel) {
+                                      return SizedBox(
+                                        child: Align(
+                                          alignment: Alignment.topRight,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    AlertDialog(
+                                                  title: const Text(
+                                                      'Add your comment'),
+                                                  content: TextField(
+                                                    controller: _cmtController,
+                                                    decoration:
+                                                        const InputDecoration(
+                                                            hintText:
+                                                                'Enter something...'),
                                                   ),
+                                                  actions: [
+                                                    TextButton(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        foregroundColor:
+                                                            Colors.black,
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child:
+                                                          const Text('Cancel'),
+                                                    ),
+                                                    TextButton(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        foregroundColor:
+                                                            Colors.white,
+                                                        backgroundColor:
+                                                            customPurple,
+                                                      ),
+                                                      onPressed: () async {
+                                                        String enteredText =
+                                                            _cmtController.text;
+
+                                                        try {
+                                                          // Save the comment to the tailor's profile collection under the user ID and comments subcollection
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'tailorProfile')
+                                                              .doc(widget
+                                                                  .tailorProfileModel!
+                                                                  .tailorId!)
+                                                              .collection(
+                                                                  'comments')
+                                                              .add({
+                                                            'comment':
+                                                                enteredText,
+                                                            'timestamp': FieldValue
+                                                                .serverTimestamp(),
+                                                            'userId':
+                                                                FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser!
+                                                                    .uid,
+                                                            'userName':
+                                                                userModel
+                                                                    .username!,
+                                                            'userPhotoUrl':
+                                                                userModel
+                                                                    .photoUrl!,
+                                                          });
+
+                                                          // Optional: Show a snackbar or toast to indicate successful saving
+                                                          // ignore: use_build_context_synchronously
+                                                          showSnackBar(context,
+                                                              'Comment saved successfully!');
+                                                          // Clear the text field
+                                                          _cmtController
+                                                              .clear();
+                                                          // Close the dialog box
+                                                          // ignore: use_build_context_synchronously
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        } catch (e) {
+                                                          // Handle any errors that occur during saving
+                                                          print(
+                                                              'Error saving comment: $e');
+                                                          // Optional: Show an error snackbar or toast
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            const SnackBar(
+                                                                content: Text(
+                                                                    'Error saving comment. Please try again.')),
+                                                          );
+                                                        }
+                                                      },
+                                                      child: const Text('OK'),
+                                                    ),
+                                                  ],
                                                 ),
                                               );
                                             },
-                                            loading: () =>
-                                                const CircularProgressIndicator(
-                                              color: customPurple,
-                                              strokeWidth: 2,
+                                            icon: Icon(
+                                              Icons
+                                                  .chat_bubble_outline_outlined,
+                                              color: darkPink,
+                                              size: size.height * 0.035,
                                             ),
-                                            error: (error, stackTrace) =>
-                                                const Text(
-                                              '',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: size.height * 0.02,
-                    left: size.width * 0.02,
-                    right: size.width * 0.02,
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      top: size.height * 0.02,
-                      left: size.width * 0.02,
-                      right: size.width * 0.02,
-                    ),
-                    height: size.height * 0.14,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: cardColor,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                            bottom: size.height * 0.02,
-                          ),
-                          height: size.height * 0.04,
-                          width: size.width * 0.25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: red,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Gents Simple",
-                              style: TextStyle(
-                                fontSize: size.height * 0.016,
-                                fontWeight: FontWeight.w500,
-                                color: customWhite,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: size.width * 0.02,
-                            bottom: size.height * 0.02,
-                          ),
-                          height: size.height * 0.04,
-                          width: size.width * 0.25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: customOrange,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Gents Fashion",
-                              style: TextStyle(
-                                fontSize: size.height * 0.016,
-                                fontWeight: FontWeight.w500,
-                                color: customWhite,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: size.height * 0.02,
-                            bottom: size.height * 0.02,
-                          ),
-                          height: size.height * 0.04,
-                          width: size.width * 0.25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: customOrange,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Ladies Simple",
-                              style: TextStyle(
-                                fontSize: size.height * 0.016,
-                                fontWeight: FontWeight.w500,
-                                color: customWhite,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            right: size.width * 0.02,
-                          ),
-                          height: size.height * 0.04,
-                          width: size.width * 0.25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: customOrange,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Ladies Stylish",
-                              style: TextStyle(
-                                  fontSize: size.height * 0.016,
-                                  fontWeight: FontWeight.w500,
-                                  color: customWhite),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: size.height * 0.04,
-                          width: size.width * 0.25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: customOrange,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Kid",
-                              style: TextStyle(
-                                  fontSize: size.height * 0.016,
-                                  fontWeight: FontWeight.w500,
-                                  color: customWhite),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: size.height * 0.02,
-                    right: size.width * 0.02,
-                    left: size.width * 0.02,
-                  ),
-                  child: Container(
-                    height: size.height * 0.18,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: cardColor),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: size.height * 0.03,
-                            left: size.width * 0.03,
-                            right: size.width * 0.03,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Delivery",
-                                style: TextStyle(
-                                  fontSize: size.height * 0.022,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "30 mins",
-                                style: TextStyle(
-                                  fontSize: size.height * 0.02,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              Text(
-                                "Rs. 80",
-                                style: TextStyle(
-                                  fontSize: size.height * 0.02,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
-                        Divider(
-                          color: customBlack,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: size.height * 0.02,
-                            left: size.width * 0.03,
-                            right: size.width * 0.03,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Services",
-                                style: TextStyle(
-                                  fontSize: size.height * 0.022,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                width: size.width * 0.22,
-                              ),
-                              SizedBox(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    "Stiching Ladies & Gents suits",
-                                    style: TextStyle(
-                                      fontSize: size.height * 0.02,
-                                      fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    loading: () =>
+                                        const CircularProgressIndicator(
+                                      color: customPurple,
+                                      strokeWidth: 2,
                                     ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Consumer(
-                  builder: (context, ref, _) {
-                    // Getting coaches List
-                    final coaches = ref.watch(
-                        allComments(widget.tailorProfileModel!.tailorId));
-                    ref.refresh(
-                        allComments(widget.tailorProfileModel!.tailorId));
-                    return coaches.when(
-                      data: (userModelList) {
-                        feedbackCardCount = userModelList.length;
-                        return userModelList.length == 0
-                            ? Center(
-                                child: Padding(
-                                padding:
-                                    EdgeInsets.only(top: size.height * 0.02),
-                                child: Text("First one to Comment",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: customOrange)),
-                              ))
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: showAllFeedbackCards
-                                    ? userModelList
-                                        .length // Show all feedback cards
-                                    : 1, // Show limited feedback cards
-                                itemBuilder: (BuildContext context, int index) {
-                                  return FeedbackCard(
-                                    cmtModel: userModelList[index],
+                                    error: (error, stackTrace) => const Text(
+                                      '',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   );
                                 },
-                              );
-                      },
-                      error: (error, stackTrace) => Text('Error: $error'),
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  },
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ],
                 ),
-                if (!showAllFeedbackCards)
-                  feedbackCardCount == 0
-                      ? Container()
-                      : TextButton(
-                          onPressed: () {
-                            setState(() {
-                              showAllFeedbackCards =
-                                  true; // Show all feedback cards when "Show More" button is clicked
-                            });
-                          },
-                          child: Text(
-                            "Show More",
-                            style: TextStyle(
-                              fontSize: size.height * 0.023,
-                              fontWeight: FontWeight.w600,
-                              color: customPurple,
-                            ),
-                          ),
-                        ),
-                if (showAllFeedbackCards)
-                  feedbackCardCount == 0
-                      ? Container()
-                      : TextButton(
-                          onPressed: () {
-                            setState(() {
-                              showAllFeedbackCards =
-                                  false; // Show limited feedback cards when "Show Less" button is clicked
-                            });
-                          },
-                          child: Text(
-                            "Show Less",
-                            style: TextStyle(
-                              fontSize: size.height * 0.023,
-                              fontWeight: FontWeight.w600,
-                              color: customPurple,
-                            ),
-                          ),
-                        ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.only(
+                top: size.height * 0.02,
+                left: size.width * 0.02,
+                right: size.width * 0.02,
+              ),
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: size.height * 0.02,
+                  left: size.width * 0.02,
+                  right: size.width * 0.02,
+                ),
+                height: size.height * 0.14,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: cardColor,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: size.height * 0.02,
+                      ),
+                      height: size.height * 0.04,
+                      width: size.width * 0.25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: red,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Gents Simple",
+                          style: TextStyle(
+                            fontSize: size.height * 0.016,
+                            fontWeight: FontWeight.w500,
+                            color: customWhite,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        left: size.width * 0.02,
+                        bottom: size.height * 0.02,
+                      ),
+                      height: size.height * 0.04,
+                      width: size.width * 0.25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: customOrange,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Gents Fashion",
+                          style: TextStyle(
+                            fontSize: size.height * 0.016,
+                            fontWeight: FontWeight.w500,
+                            color: customWhite,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        left: size.height * 0.02,
+                        bottom: size.height * 0.02,
+                      ),
+                      height: size.height * 0.04,
+                      width: size.width * 0.25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: customOrange,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Ladies Simple",
+                          style: TextStyle(
+                            fontSize: size.height * 0.016,
+                            fontWeight: FontWeight.w500,
+                            color: customWhite,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        right: size.width * 0.02,
+                      ),
+                      height: size.height * 0.04,
+                      width: size.width * 0.25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: customOrange,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Ladies Stylish",
+                          style: TextStyle(
+                              fontSize: size.height * 0.016,
+                              fontWeight: FontWeight.w500,
+                              color: customWhite),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: size.height * 0.04,
+                      width: size.width * 0.25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: customOrange,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Kid",
+                          style: TextStyle(
+                              fontSize: size.height * 0.016,
+                              fontWeight: FontWeight.w500,
+                              color: customWhite),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                top: size.height * 0.02,
+                right: size.width * 0.02,
+                left: size.width * 0.02,
+              ),
+              child: Container(
+                height: size.height * 0.18,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: cardColor),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: size.height * 0.03,
+                        left: size.width * 0.03,
+                        right: size.width * 0.03,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Delivery",
+                            style: TextStyle(
+                              fontSize: size.height * 0.022,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            "30 mins",
+                            style: TextStyle(
+                              fontSize: size.height * 0.02,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Text(
+                            "Rs. 80",
+                            style: TextStyle(
+                              fontSize: size.height * 0.02,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    Divider(
+                      color: customBlack,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: size.height * 0.02,
+                        left: size.width * 0.03,
+                        right: size.width * 0.03,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Services",
+                            style: TextStyle(
+                              fontSize: size.height * 0.022,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "Stiching Ladies & Gents suits",
+                                style: TextStyle(
+                                  fontSize: size.height * 0.02,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Consumer(
+              builder: (context, ref, _) {
+                // Getting coaches List
+                final coaches =
+                    ref.watch(allComments(widget.tailorProfileModel!.tailorId));
+                ref.refresh(allComments(widget.tailorProfileModel!.tailorId));
+                return coaches.when(
+                  data: (userModelList) {
+                    feedbackCardCount = userModelList.length;
+                    return userModelList.length == 0
+                        ? Center(
+                            child: Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text("First one to Comment",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: customOrange)),
+                          ))
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: showAllFeedbackCards
+                                ? userModelList
+                                    .length // Show all feedback cards
+                                : 1, // Show limited feedback cards
+                            itemBuilder: (BuildContext context, int index) {
+                              return FeedbackCard(
+                                cmtModel: userModelList[index],
+                              );
+                            },
+                          );
+                  },
+                  error: (error, stackTrace) => Text('Error: $error'),
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              },
+            ),
+            if (!showAllFeedbackCards)
+              feedbackCardCount == 0
+                  ? Container()
+                  : TextButton(
+                      onPressed: () {
+                        setState(() {
+                          showAllFeedbackCards =
+                              true; // Show all feedback cards when "Show More" button is clicked
+                        });
+                      },
+                      child: Text(
+                        "Show More",
+                        style: TextStyle(
+                          fontSize: size.height * 0.023,
+                          fontWeight: FontWeight.w600,
+                          color: customPurple,
+                        ),
+                      ),
+                    ),
+            if (showAllFeedbackCards)
+              feedbackCardCount == 0
+                  ? Container()
+                  : TextButton(
+                      onPressed: () {
+                        setState(() {
+                          showAllFeedbackCards =
+                              false; // Show limited feedback cards when "Show Less" button is clicked
+                        });
+                      },
+                      child: Text(
+                        "Show Less",
+                        style: TextStyle(
+                          fontSize: size.height * 0.023,
+                          fontWeight: FontWeight.w600,
+                          color: customPurple,
+                        ),
+                      ),
+                    ),
+          ],
+        ),
       ),
     );
   }

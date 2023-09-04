@@ -238,7 +238,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
                       );
                     },
                     child: SizedBox(
-                      height: size.height * 0.1,
                       width: double.infinity,
                       child: Card(
                         color: cardColor,
@@ -473,79 +472,79 @@ class _CustomerProfileState extends State<CustomerProfile> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: SizedBox(
-                      height: size.height * 0.1,
-                      width: double.infinity,
-                      child: Card(
-                        color: cardColor,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    left: size.width * 0.01,
-                                    right: size.width * 0.01,
-                                  ),
-                                  child: Icon(
-                                    Icons.help,
-                                    color: darkPink,
-                                    size: size.height * 0.05,
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Help Center",
-                                      style: TextStyle(
-                                        fontSize: size.width * 0.05,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    Text(
-                                      "See FAQ and contact support",
-                                      style: TextStyle(
-                                        fontSize: size.width * 0.045,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      right: size.width * 0.02,
-                                    ),
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Icon(
-                                        Icons.arrow_forward,
-                                        color: darkPink,
-                                        size: size.height * 0.038,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.02),
-                              child: const Divider(
-                                color: customOrange,
-                                thickness: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {},
+                  //   child: SizedBox(
+                  //     height: size.height * 0.1,
+                  //     width: double.infinity,
+                  //     child: Card(
+                  //       color: cardColor,
+                  //       child: Column(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Row(
+                  //             children: [
+                  //               Padding(
+                  //                 padding: EdgeInsets.only(
+                  //                   left: size.width * 0.01,
+                  //                   right: size.width * 0.01,
+                  //                 ),
+                  //                 child: Icon(
+                  //                   Icons.help,
+                  //                   color: darkPink,
+                  //                   size: size.height * 0.05,
+                  //                 ),
+                  //               ),
+                  //               Column(
+                  //                 mainAxisAlignment: MainAxisAlignment.center,
+                  //                 crossAxisAlignment: CrossAxisAlignment.start,
+                  //                 children: [
+                  //                   Text(
+                  //                     "Help Center",
+                  //                     style: TextStyle(
+                  //                       fontSize: size.width * 0.05,
+                  //                       fontWeight: FontWeight.w500,
+                  //                     ),
+                  //                   ),
+                  //                   Text(
+                  //                     "See FAQ and contact support",
+                  //                     style: TextStyle(
+                  //                       fontSize: size.width * 0.045,
+                  //                       fontWeight: FontWeight.w300,
+                  //                     ),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //               Expanded(
+                  //                 child: Padding(
+                  //                   padding: EdgeInsets.only(
+                  //                     right: size.width * 0.02,
+                  //                   ),
+                  //                   child: Align(
+                  //                     alignment: Alignment.centerRight,
+                  //                     child: Icon(
+                  //                       Icons.arrow_forward,
+                  //                       color: darkPink,
+                  //                       size: size.height * 0.038,
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //           Padding(
+                  //             padding: EdgeInsets.symmetric(
+                  //                 horizontal: size.width * 0.02),
+                  //             child: const Divider(
+                  //               color: customOrange,
+                  //               thickness: 1,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     height: size.height * 0.05,
                   ),
