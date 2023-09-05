@@ -1,5 +1,8 @@
 import 'package:ect/Constants/colors.dart';
+import 'package:ect/view_models/providers/measurement_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class YourMeasurements extends StatefulWidget {
   const YourMeasurements({super.key});
@@ -9,11 +12,6 @@ class YourMeasurements extends StatefulWidget {
 }
 
 class _YourMeasurementsState extends State<YourMeasurements> {
-  final sleeveController = TextEditingController();
-  final armController = TextEditingController();
-  final chestController = TextEditingController();
-  final shoulderController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -34,202 +32,270 @@ class _YourMeasurementsState extends State<YourMeasurements> {
           elevation: 0,
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.height * 0.03,
-            vertical: size.height * 0.08,
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: size.height * 0.02),
-                    child: Text(
-                      "Sleeve length",
-                      style: TextStyle(
-                        fontSize: size.height * 0.024,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.15,
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: sleeveController,
-                      cursorColor: customPurple,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: "27.72",
-                        hintStyle: TextStyle(
-                            fontSize: size.height * 0.024,
-                            fontWeight: FontWeight.w400,
-                            color: customBlack),
-                        border: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: customPurple),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: customPurple,
-                            width: size.width * 0.02,
+          padding: const EdgeInsets.all(8.0),
+          child: Consumer(
+            builder: (context, ref, _) {
+              // Getting coaches List
+              final userMeasurement = ref
+                  .watch(measurement(FirebaseAuth.instance.currentUser?.uid));
+              ref.refresh(measurement(FirebaseAuth.instance.currentUser?.uid));
+              return userMeasurement.when(
+                data: (userData) {
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: size.height * 0.02,
+                            ),
+                            child: Text(
+                              "Height",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: size.height * 0.02),
-                    child: Text(
-                      "Arm length",
-                      style: TextStyle(
-                        fontSize: size.height * 0.024,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.15,
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: armController,
-                      cursorColor: customPurple,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: "23.69",
-                        hintStyle: TextStyle(
-                            fontSize: size.height * 0.024,
-                            fontWeight: FontWeight.w400,
-                            color: customBlack),
-                        border: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: customPurple),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: customPurple,
-                            width: size.width * 0.02,
+                          Text(
+                            "${userData.height} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: size.height * 0.02),
-                    child: Text(
-                      "Chest",
-                      style: TextStyle(
-                        fontSize: size.height * 0.024,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.15,
-                    child: TextFormField(
-                      readOnly: true,
-                      textAlign: TextAlign.center,
-                      controller: chestController,
-                      cursorColor: customPurple,
-                      decoration: InputDecoration(
-                        hintText: "49.8",
-                        hintStyle: TextStyle(
-                            fontSize: size.height * 0.024,
-                            fontWeight: FontWeight.w400,
-                            color: customBlack),
-                        border: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: customPurple),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: customPurple,
-                            width: size.width * 0.02,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: size.height * 0.02,
+                            ),
+                            child: Text(
+                              "Waist",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: size.height * 0.02,
-                    ),
-                    child: Text(
-                      "Shoulder",
-                      style: TextStyle(
-                        fontSize: size.height * 0.024,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.15,
-                    child: TextFormField(
-                      cursorColor: customPurple,
-                      readOnly: true,
-                      textAlign: TextAlign.center,
-                      controller: shoulderController,
-                      decoration: InputDecoration(
-                        hintText: "19.92",
-                        hintStyle: TextStyle(
-                            fontSize: size.height * 0.024,
-                            fontWeight: FontWeight.w400,
-                            color: customBlack),
-                        border: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: customPurple),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: customPurple,
-                            width: size.height * 0.02,
+                          Text(
+                            "${userData.waist} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: size.height * 0.08,
-              ),
-              SizedBox(
-                width: size.width * 0.3,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      sleeveController.text = "0";
-                      armController.text = "0";
-                      chestController.text = "0";
-                      shoulderController.text = "0";
-                    });
-                    Navigator.pop(context);
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(customOrange),
-                  ),
-                  child: Text(
-                    "Reset",
-                    style: TextStyle(
-                      fontSize: size.height * 0.019,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text(
+                              "Belly",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${userData.belly} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text(
+                              "Chest",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${userData.chest} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text(
+                              "Wrist",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${userData.wrist} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text(
+                              "Neck",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${userData.neck} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text(
+                              "Arm Length",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${userData.armLength} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text(
+                              "Thigh",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${userData.thigh} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text(
+                              "Shoulder Width",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${userData.shoulderWidth} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text(
+                              "Hips",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${userData.hips} cm",
+                            style: TextStyle(
+                              fontSize: size.height * 0.024,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.02),
+                            child: Text(
+                              "Ankle",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Text("${userData.ankle} cm",
+                              style: TextStyle(
+                                fontSize: size.height * 0.024,
+                                fontWeight: FontWeight.w400,
+                              )),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+                error: (error, stackTrace) => Container(),
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
